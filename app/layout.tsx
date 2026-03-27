@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 // 1. Import Provider bahasa yang tadi kita buat
 import { LanguageProvider } from "../context/LanguageContext"; 
-
+import Preloader from "../components/Preloader";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -34,6 +34,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-[#FDFDF1]">
         {/* 4. Bungkus children dengan LanguageProvider */}
         <LanguageProvider>
+          <Preloader />
           {children}
         </LanguageProvider>
       </body>

@@ -199,7 +199,7 @@ export default function Experience() {
                                 <span>{t.langId} <span className="font-medium opacity-70 text-xs tracking-wide">({t.langIdLevel})</span></span>
                             </div>
                             <div className="flex justify-center items-center gap-3 px-5 py-2.5 bg-white text-[#1B3022] rounded-full text-sm font-semibold border border-white/20 shadow-md">
-                                <Image src="/flag-uk.png" alt="English" width={24} height={16} className="object-contain drop-shadow-sm" /> 
+                                <Image src="/flag-UK.jpg" alt="English" width={24} height={16} className="object-contain drop-shadow-sm" /> 
                                 <span>{t.langEn} <span className="font-medium opacity-70 text-xs tracking-wide">({t.langEnLevel})</span></span>
                             </div>
                           </div>
