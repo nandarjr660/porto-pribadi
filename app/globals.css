@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  /* Di sinilah kita mendaftarkan warna custom kamu */
+  --color-primary-cream: #fdfdf1;
+  --color-accent-cream: #fefded;
+  --color-green-soft: #c1d8c3;
+  --color-green-bold: #43766c;
+  --color-dark-text: #1b3022;
+}
+
+:root {
+  scroll-behavior: smooth;
+}
+
+body {
+  /* Setel warna dasar layar dan teks */
+  background-color: var(--color-primary-cream);
+  color: var(--color-dark-text);
+  overflow-x: hidden;
+}
