@@ -131,12 +131,12 @@ export default function Experience() {
                 >
                   <div className="flex flex-col gap-1 pr-4">
                       <h3 className={`text-xl md:text-2xl font-bold transition-colors duration-300 ${
-                        isOpen ? "text-white" : "text-[#1B3022]"
+                        isOpen ? "text-[#FDFDF1]" : "text-[#1B3022]"
                       }`}>
                         {item.title}
                       </h3>
                       <p className={`text-sm transition-colors duration-300 ${
-                        isOpen ? "text-white/80" : "text-[#1B3022]/60"
+                        isOpen ? "text-[#FDFDF1]/80" : "text-[#1B3022]/60"
                       }`}>
                         {item.summary}
                       </p>
@@ -167,7 +167,7 @@ export default function Experience() {
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                     >
                       <div className="relative z-10 px-4 md:px-6 pb-6 pt-2">
-                        <p className="text-white leading-relaxed text-lg max-w-2xl">
+                        <p className="text-[#FDFDF1] leading-relaxed text-lg max-w-2xl">
                           {item.desc}
                         </p>
 
