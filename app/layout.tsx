@@ -18,11 +18,11 @@ const geistMono = Geist_Mono({
 
 // 2. Update Metadata biar lebih profesional
 export const metadata: Metadata = {
-  title: "Hasmunandar | Calon Pendidik SD & Web Enthusiast",
-  description: "Portofolio Profesional Hasmunandar, Lulusan PPG Prajabatan yang mengintegrasikan pedagogik dengan inovasi digital kreatif.",
+  title: "Hasmunandar | Portfolio Pendidik SD & Inovator Web Kreatif",
+  description: "Selamat datang di portofolio Hasmunandar, seorang lulusan PPG Prajabatan yang berdedikasi mengintegrasikan pedagogik sekolah dasar dengan solusi digital modern yang kreatif.",
   openGraph: {
-    title: "Hasmunandar | Portfolio",
-    description: "Lulusan PPG Prajabatan yang fokus pada inovasi pembelajaran digital.",
+    title: "Hasmunandar | Portfolio Pendidik SD & Inovator Web Kreatif",
+    description: "Selamat datang di portofolio Hasmunandar, seorang lulusan PPG Prajabatan yang berdedikasi mengintegrasikan pedagogik sekolah dasar dengan solusi digital modern yang kreatif.",
     url: "https://hsmnandar.vercel.app",
     siteName: "Hasmunandar Portfolio",
     images: [
