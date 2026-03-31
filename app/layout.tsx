@@ -19,10 +19,10 @@ const geistMono = Geist_Mono({
 // 2. Update Metadata biar lebih profesional
 export const metadata: Metadata = {
   title: "Hasmunandar | Portfolio Pendidik SD & Inovator Web Kreatif",
-  description: "Selamat datang di portofolio Hasmunandar, seorang lulusan PPG Prajabatan yang berdedikasi mengintegrasikan pedagogik sekolah dasar dengan solusi digital modern yang kreatif.",
+  description: "Portofolio profesional Hasmunandar, lulusan PPG Prajabatan yang mengintegrasikan pedagogik SD dengan solusi digital kreatif.",
   openGraph: {
     title: "Hasmunandar | Portfolio Pendidik SD & Inovator Web Kreatif",
-    description: "Selamat datang di portofolio Hasmunandar, seorang lulusan PPG Prajabatan yang berdedikasi mengintegrasikan pedagogik sekolah dasar dengan solusi digital modern yang kreatif.",
+    description: "Portofolio profesional Hasmunandar, lulusan PPG Prajabatan yang mengintegrasikan pedagogik SD dengan solusi digital kreatif.",
     url: "https://hsmnandar.vercel.app",
     siteName: "Hasmunandar Portfolio",
     images: [
@@ -38,6 +38,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    description: "Portofolio profesional Hasmunandar, lulusan PPG Prajabatan yang mengintegrasikan pedagogik SD dengan solusi digital kreatif.",
   },
   icons: {
     icon: "/favicon.svg", // Note: public/ hanya memiliki favicon.svg saat ini
