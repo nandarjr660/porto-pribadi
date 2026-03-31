@@ -58,7 +58,7 @@ export default function About() {
           <div className="w-64 h-[350px] md:w-80 md:h-[450px] lg:w-[340px] lg:h-[500px] bg-[#FDFDF1]/10 rounded-[2.5rem] border border-[#FDFDF1]/10 shadow-2xl relative overflow-hidden group backdrop-blur-sm p-2">
             <div className="w-full h-full bg-[#FDFDF1] rounded-[2rem] relative overflow-hidden group shadow-inner border border-[#1B3022]/10">
                 <Image 
-                    src="/profil.png" 
+                    src="/images/profil.jpg" 
                     alt="Hasmunandar - Profile"
                     fill
                     sizes="(max-width: 768px) 16rem, 20rem" 

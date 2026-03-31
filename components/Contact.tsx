@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
+import confetti from "canvas-confetti";
 
 const content = {
   ID: {
@@ -47,6 +48,7 @@ export default function Contact() {
   const { language } = useLanguage();
   const t = content[language as keyof typeof content] || content.ID;
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [resultMessage, setResultMessage] = useState<{ type: "success" | "error" | null, text: string }>({ type: null, text: "" });
 
   const handleSubmit = async (e: any) => {
@@ -63,8 +65,39 @@ export default function Contact() {
       const data = await response.json();
 
       if (data.success) {
+        setIsSuccess(true);
         setResultMessage({ type: "success", text: t.successMsg });
         e.target.reset(); // Kosongkan field form
+
+        // Memicu efek confetti meletup-letup selama 3 detik
+        const duration = 3000;
+        const end = Date.now() + duration;
+
+        const frame = () => {
+          confetti({
+            particleCount: 5,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: ['#43766C', '#FDFDF1', '#FFD700']
+          });
+          confetti({
+            particleCount: 5,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: ['#43766C', '#FDFDF1', '#FFD700']
+          });
+
+          if (Date.now() < end) {
+            requestAnimationFrame(frame);
+          }
+        };
+        frame();
+
+        // Kembalikan tombol ke keadaan semula setelah sekitar 4 detik (setelah confetti selesai)
+        setTimeout(() => setIsSuccess(false), 4000);
+
       } else {
         console.error("Web3Forms Error:", data);
         setResultMessage({ type: "error", text: t.errorMsg });
@@ -217,10 +250,12 @@ export default function Contact() {
                 {/* Tombol Kirim */}
                 <button 
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isSuccess}
                   className={`mt-4 w-full py-4 rounded-2xl font-bold tracking-wider uppercase transition-all duration-300 flex justify-center items-center gap-2 ${
                     isSubmitting 
                     ? "bg-[#1B3022]/50 text-white cursor-not-allowed" 
+                    : isSuccess
+                    ? "bg-[#43766C] text-white cursor-not-allowed"
                     : "bg-[#1B3022] text-[#FDFDF1] hover:bg-[#43766C] shadow-lg hover:shadow-xl hover:-translate-y-1"
                   }`}
                 >
@@ -232,6 +267,13 @@ export default function Contact() {
                         className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
                       />
                       {t.form.sending}
+                    </>
+                  ) : isSuccess ? (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      {language === "ID" ? "Berhasil Terkirim!" : "Successfully Sent!"}
                     </>
                   ) : (
                     <>

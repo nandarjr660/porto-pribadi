@@ -18,7 +18,7 @@ const content = {
         subtitle: "SDN Pengasinan IX • Praktik Lapangan",
         desc: "Platform digital yang merangkum seluruh dokumentasi mengajar selama PPL. Menjadi bukti nyata integrasi teknologi dalam pendokumentasian pedagogik.",
         tags: ["Web Portofolio", "Dokumentasi Digital"],
-        imageSrc: "/mockup-ppg.png",
+        imageSrc: "/images/mockup-ppg.png",
         type: "link",
         buttonText: "Kunjungi Web Portofolio",
         details: { url: "https://ppl-hasmunandar.vercel.app/" }
@@ -29,7 +29,7 @@ const content = {
         subtitle: "Pengembangan Perangkat Pembelajaran",
         desc: "Kumpulan media presentasi visual dan LKPD dirancang khusus memantik berpikir kritis (HOTS) siswa, sesuai tahap perkembangan anak usia dasar.",
         tags: ["Canva", "Desain Visual", "HOTS"],
-        imageSrc: "/mockup-lkpd.png",
+        imageSrc: "/images/mockup-lkpd.png",
         type: "modal",
         buttonText: "Lihat Detail Media",
         details: {
@@ -46,7 +46,7 @@ const content = {
         subtitle: "Web Development & AI Integration",
         desc: "Membangun website portofolio interaktif ini dari nol (Next.js), memanfaatkan kolaborasi AI (Prompt Engineering) untuk merancang UI/UX pendidik profesional.",
         tags: ["Next.js", "AI Prompting"],
-        imageSrc: "/mockup-porto.png",
+        imageSrc: "/images/mockup-porto.png",
         type: "link",
         buttonText: "Jelajahi Source Code",
         details: { url: "https://github.com/nandarjr660/porto-pribadi" }
@@ -66,7 +66,7 @@ const content = {
         subtitle: "SDN Pengasinan IX • Field Practice",
         desc: "A digital platform summarizing all teaching documentation during PPL. Serving as tangible evidence of technology integration in pedagogical documentation.",
         tags: ["Web Portfolio", "Digital Documentation"],
-        imageSrc: "/mockup-ppg.png",
+        imageSrc: "/images/mockup-ppg.png",
         type: "link",
         buttonText: "Visit Web Portfolio",
         details: { url: "https://ppl-hasmunandar.vercel.app/" }
@@ -77,7 +77,7 @@ const content = {
         subtitle: "Teaching Device Development",
         desc: "A collection of visual presentation media and worksheets specifically designed to spark students' critical thinking (HOTS), suitable for the developmental stage of primary-aged children.",
         tags: ["Canva", "Visual Design", "HOTS"],
-        imageSrc: "/mockup-lkpd.png",
+        imageSrc: "/images/mockup-lkpd.png",
         type: "modal",
         buttonText: "View Media Details",
         details: {
@@ -94,7 +94,7 @@ const content = {
         subtitle: "Web Development & AI Integration",
         desc: "Building this interactive portfolio website from scratch (Next.js), utilizing AI collaboration (Prompt Engineering) to design the UI/UX for a professional educator.",
         tags: ["Next.js", "AI Prompting"],
-        imageSrc: "/mockup-porto.png",
+        imageSrc: "/images/mockup-porto.png",
         type: "link",
         buttonText: "Explore Source Code",
         details: { url: "https://github.com/nandarjr660/porto-pribadi" }

@@ -178,15 +178,15 @@ export default function Experience() {
                           <div className="mt-8 flex flex-wrap gap-3">
                             {/* --- Bagian TOOLS (Ms Office, Canva, Antigravity) --- */}
                             <div className="flex justify-center items-center gap-2 px-5 py-2.5 bg-white text-[#1B3022] rounded-full text-sm font-semibold border border-white/20 shadow-md">
-                              <Image src="/ms-office.png" alt="Ms Office" width={20} height={20} className="object-contain" />
+                              <Image src="/icons/ms-office.png" alt="Ms Office" width={20} height={20} className="object-contain" />
                               Ms. Office
                             </div>
                             <div className="flex justify-center items-center gap-2 px-5 py-2.5 bg-white text-[#1B3022] rounded-full text-sm font-semibold border border-white/20 shadow-md">
-                              <Image src="/canva.png" alt="Canva" width={20} height={20} className="object-contain" />
+                              <Image src="/icons/canva.png" alt="Canva" width={20} height={20} className="object-contain" />
                               Canva
                             </div>
                             <div className="flex justify-center items-center gap-2 px-5 py-2.5 bg-white text-[#1B3022] rounded-full text-sm font-semibold border border-white/20 shadow-md">
-                              <Image src="/antigravity.png" alt="Antigravity AI" width={20} height={20} className="object-contain" />
+                              <Image src="/icons/antigravity.png" alt="Antigravity AI" width={20} height={20} className="object-contain" />
                               Antigravity AI
                             </div>
                             
@@ -195,11 +195,11 @@ export default function Experience() {
 
                             {/* --- Bagian LANGUAGES --- */}
                             <div className="flex justify-center items-center gap-3 px-5 py-2.5 bg-white text-[#1B3022] rounded-full text-sm font-semibold border border-white/20 shadow-md">
-                                <Image src="/flag-id.png" alt="Indonesia" width={24} height={16} className="object-contain drop-shadow-sm" /> 
+                                <Image src="/icons/flag-id.png" alt="Indonesia" width={24} height={16} className="object-contain drop-shadow-sm" /> 
                                 <span>{t.langId} <span className="font-medium opacity-70 text-xs tracking-wide">({t.langIdLevel})</span></span>
                             </div>
                             <div className="flex justify-center items-center gap-3 px-5 py-2.5 bg-white text-[#1B3022] rounded-full text-sm font-semibold border border-white/20 shadow-md">
-                                <Image src="/flag-UK.jpg" alt="English" width={24} height={16} className="object-contain drop-shadow-sm" /> 
+                                <Image src="/icons/flag-uk.webp" alt="English" width={24} height={16} className="object-contain drop-shadow-sm" /> 
                                 <span>{t.langEn} <span className="font-medium opacity-70 text-xs tracking-wide">({t.langEnLevel})</span></span>
                             </div>
                           </div>

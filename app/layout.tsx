@@ -4,6 +4,7 @@ import "./globals.css";
 // 1. Import Provider bahasa yang tadi kita buat
 import { LanguageProvider } from "../context/LanguageContext"; 
 import Preloader from "../components/Preloader";
+import ProgressBar from "../components/ProgressBar";
 import FloatingButtons from "../components/FloatingButtons";
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,10 +18,29 @@ const geistMono = Geist_Mono({
 
 // 2. Update Metadata biar lebih profesional
 export const metadata: Metadata = {
-  title: "Hasmunandar | Portfolio",
-  description: "Portofolio profesional Hasmunandar - Lulusan PGSD & PPG yang berdedikasi mengintegrasikan teknologi dalam pendidikan.",
+  title: "Hasmunandar | Calon Pendidik SD & Web Enthusiast",
+  description: "Portofolio Profesional Hasmunandar, Lulusan PPG Prajabatan yang mengintegrasikan pedagogik dengan inovasi digital kreatif.",
+  openGraph: {
+    title: "Hasmunandar | Portfolio",
+    description: "Lulusan PPG Prajabatan yang fokus pada inovasi pembelajaran digital.",
+    url: "https://hsmnandar.vercel.app",
+    siteName: "Hasmunandar Portfolio",
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Hasmunandar Portfolio Preview"
+      }
+    ],
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
   icons: {
-    icon: "/favicon.svg",
+    icon: "/favicon.svg", // Note: public/ hanya memiliki favicon.svg saat ini
   },
 };
 
@@ -42,6 +62,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-[#FDFDF1] overflow-x-hidden w-full max-w-full">
         {/* 4. Bungkus children dengan LanguageProvider */}
         <LanguageProvider>
+          <ProgressBar />
           <Preloader />
           <FloatingButtons />
           {children}
