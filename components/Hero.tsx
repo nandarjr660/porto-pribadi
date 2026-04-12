@@ -79,7 +79,7 @@ export default function Hero() {
             <Link href="#projects" className="flex items-center justify-center gap-2 px-8 py-4 bg-[#43766C] text-white rounded-full hover:bg-[#1B3022] transition-all shadow-lg" scroll={true}>
               {t.btnProject}
             </Link>
-            <a href="/CV-Hasmunandar.pdf" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-8 py-4 border-2 border-[#43766C] text-[#43766C] rounded-full hover:bg-[#43766C]/10 transition-all">
+            <a href="https://drive.google.com/file/d/1_wOUIG4XkeXgoGzk7TXX1zSceT-FDTxs/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 px-8 py-4 border-2 border-[#43766C] text-[#43766C] rounded-full hover:bg-[#43766C]/10 transition-all">
               {t.btnCv}
             </a>
           </div>
