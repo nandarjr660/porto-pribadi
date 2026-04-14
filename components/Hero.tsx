@@ -7,16 +7,16 @@ import { useLanguage } from "../context/LanguageContext";
 const content = {
   ID: {
     greeting: "Halo, Saya",
-    name: "Hasmunandar.",
-    desc: "Calon Pendidik Sekolah Dasar & Web Enthusiast. Menggabungkan ilmu keguruan (PGSD/PPG) dengan solusi kreatif di dunia digital.",
+    name: "Hasmunandar, S.Pd.",
+    desc: "Saya adalah seorang Guru Sekolah Dasar (S.Pd) yang berfokus pada pendidikan dasar dan saat ini sedang menempuh program PPG Prajabatan.",
     btnProject: "Lihat Project",
     btnCv: "Unduh CV",
     scroll: "Scroll for more"
   },
   EN: {
     greeting: "Hello, I Am",
-    name: "Hasmunandar.",
-    desc: "Aspiring Primary School Educator & Web Enthusiast. Combining educational expertise (PGSD/PPG) with creative digital solutions.",
+    name: "Hasmunandar, S.Pd.",
+    desc: "I am a Primary School Teacher (S.Pd) focusing on primary education and currently enrolled in the PPG Prajabatan program.",
     btnProject: "View Projects",
     btnCv: "Download CV",
     scroll: "Scroll for more"
@@ -70,9 +70,9 @@ export default function Hero() {
           </h1>
           
           {/* ANIMASI 3: Deskripsi */}
-          <p className="anim-up-2 text-lg md:text-xl text-[#1B3022]/80 mb-10 leading-relaxed">
+          <h2 className="anim-up-2 text-lg md:text-xl text-[#1B3022]/80 mb-10 leading-relaxed font-normal">
             {t.desc}
-          </p>
+          </h2>
 
           {/* Tombol Action */}
           <div className="anim-up-3 flex flex-col sm:flex-row items-center justify-center gap-4 font-semibold mb-10">

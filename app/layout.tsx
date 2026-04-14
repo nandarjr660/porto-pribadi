@@ -16,13 +16,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// 2. Update Metadata biar lebih profesional
 export const metadata: Metadata = {
-  title: "Hasmunandar | Portfolio Pendidik SD & Inovator Web Kreatif",
-  description: "Portofolio profesional Hasmunandar, lulusan PPG Prajabatan yang mengintegrasikan pedagogik SD dengan solusi digital kreatif.",
+  // Langsung ke intinya: Nama dan Profesi
+  title: "Hasmunandar, S.Pd. | Guru Sekolah Dasar",
+  description: "Portofolio digital Hasmunandar, lulusan PPG Prajabatan yang berupaya terus belajar dan mendokumentasikan perjalanan menjadi guru SD di era digital.",
+  
   openGraph: {
-    title: "Hasmunandar | Portfolio Pendidik SD & Inovator Web Kreatif",
-    description: "Portofolio profesional Hasmunandar, lulusan PPG Prajabatan yang mengintegrasikan pedagogik SD dengan solusi digital kreatif.",
+    title: "Hasmunandar, S.Pd. | Portofolio Guru SD",
+    description: "Dokumentasi perjalanan mengajar, sertifikasi, dan pengembangan diri saya sebagai seorang guru sekolah dasar.",
     url: "https://hsmnandar.vercel.app",
     siteName: "Hasmunandar Portfolio",
     images: [
@@ -30,18 +31,22 @@ export const metadata: Metadata = {
         url: "/images/opengraph-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Hasmunandar Portfolio Preview"
+        alt: "Hasmunandar - Guru SD"
       }
     ],
     locale: "id_ID",
     type: "website",
   },
+  
   twitter: {
     card: "summary_large_image",
-    description: "Portofolio profesional Hasmunandar, lulusan PPG Prajabatan yang mengintegrasikan pedagogik SD dengan solusi digital kreatif.",
+    title: "Hasmunandar | Portfolio Guru SD",
+    description: "Perjalanan menjadi pendidik di sekolah dasar.",
+    images: ["/images/opengraph-image.jpg"],
   },
+  
   icons: {
-    icon: "/favicon.svg", // Note: public/ hanya memiliki favicon.svg saat ini
+    icon: "/favicon.svg",
   },
 };
 

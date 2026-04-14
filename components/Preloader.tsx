@@ -32,7 +32,7 @@ export default function Preloader() {
     >
       <div className="relative flex items-center justify-center w-full h-full">
         {/* Teks Indo (Fase 1, 2, dan setengah Fase 3) */}
-        <motion.h1
+        <motion.h2
           initial={{ filter: "blur(15px)", scale: 0.8, opacity: 0 }}
           animate={{
             filter: ["blur(15px)", "blur(0px)", "blur(0px)", "blur(10px)"],
@@ -51,11 +51,11 @@ export default function Preloader() {
           }}
           className="absolute text-3xl md:text-4xl text-center text-[#1B3022]"
         >
-          Selamat datang di <span className="font-bold text-[#43766C]">portfolio</span> saya
-        </motion.h1>
+          Selamat datang di <span className="font-bold text-[#43766C]">portofolio</span> saya
+        </motion.h2>
 
         {/* Teks Inggris (Fase 3 menyilang dan Fase 4) */}
-        <motion.h1
+        <motion.h2
           initial={{ filter: "blur(10px)", opacity: 0 }}
           animate={{
             filter: ["blur(10px)", "blur(10px)", "blur(0px)", "blur(0px)"],
@@ -73,8 +73,8 @@ export default function Preloader() {
           }}
           className="absolute text-3xl md:text-4xl text-center text-[#1B3022]"
         >
-          Welcome to my <span className="font-bold text-[#43766C]">portfolio</span>
-        </motion.h1>
+          Welcome to my <span className="font-bold text-[#43766C]">portofolio</span>
+        </motion.h2>
       </div>
     </motion.div>
   );
