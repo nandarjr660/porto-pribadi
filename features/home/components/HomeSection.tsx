@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, type Variants } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import Image from "next/image";
 import MagneticButton from "@/components/ui/MagneticButton";
 import SocialLinks from "@/components/ui/SocialLinks";
@@ -15,6 +15,7 @@ interface HomeSectionProps {
 
 const HomeSection = ({ className, entranceTrigger, navEntrance = false }: HomeSectionProps): React.JSX.Element => {
   const portraitRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   const delay = navEntrance ? 1.8 : 0.2;
 
@@ -29,20 +30,20 @@ const HomeSection = ({ className, entranceTrigger, navEntrance = false }: HomeSe
   };
 
   const slideFromRight: Variants = {
-    hidden: { opacity: 0, x: 40 },
+    hidden: { opacity: 0, x: shouldReduceMotion ? 0 : 40 },
     visible: {
       opacity: 1,
       x: 0,
-      transition: { duration: 0.8, ease: [0.25, 0.1, 0.25, 1], delay: delay },
+      transition: { duration: shouldReduceMotion ? 0.3 : 0.8, ease: [0.25, 0.1, 0.25, 1], delay: delay },
     },
   };
 
   const childVariant = (xFrom: number): Variants => ({
-    hidden: { opacity: 0, x: xFrom },
+    hidden: { opacity: 0, x: shouldReduceMotion ? 0 : xFrom },
     visible: {
       opacity: 1,
       x: 0,
-      transition: { duration: 0.6, ease: [0.25, 0.1, 0.25, 1] },
+      transition: { duration: shouldReduceMotion ? 0.3 : 0.6, ease: [0.25, 0.1, 0.25, 1] },
     },
   });
 
@@ -95,7 +96,13 @@ const HomeSection = ({ className, entranceTrigger, navEntrance = false }: HomeSe
                 style={{ opacity: 0 }}
                 variants={childVariant(-30)}
               >
-                <MagneticButton href="#project" variant="filled">
+                <MagneticButton
+                  onClick={() => {
+                    history.pushState(null, "", "/project");
+                    window.dispatchEvent(new PopStateEvent("popstate"));
+                  }}
+                  variant="filled"
+                >
                   Lihat Karya
                 </MagneticButton>
                 <MagneticButton href="https://drive.google.com/file/d/1_wOUIG4XkeXgoGzk7TXX1zSceT-FDTxs/view?usp=sharing" variant="outlined">

@@ -1,7 +1,7 @@
 const SuspenseLoader = (): React.JSX.Element => {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-pulse text-text-primary/40 text-[14px] font-body">
+    <div className="min-h-dvh flex items-center justify-center">
+      <div className="animate-pulse text-text-primary/60 text-[14px] font-body">
         Loading...
       </div>
     </div>

@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface MagneticButtonProps {
   children: React.ReactNode;
@@ -50,7 +51,7 @@ export default function MagneticButton({
   const componentProps = href ? { href } : { onClick };
 
   const baseStyles =
-    "inline-flex items-center justify-center min-w-[110px] sm:min-w-[144px] h-[38px] sm:h-[44px] px-4 sm:px-6 rounded-[9px] font-body text-[13px] sm:text-[16px] font-semibold transition-shadow duration-300 whitespace-nowrap";
+    "inline-flex items-center justify-center min-w-[110px] sm:min-w-[144px] h-[38px] sm:h-[44px] px-4 sm:px-6 rounded-[9px] font-body text-[13px] sm:text-[16px] font-semibold transition-shadow duration-300 whitespace-nowrap cursor-pointer";
 
   const shadowStyle = {
     boxShadow: "0px 34px 9px rgba(254,174,150,0.06), 0px 22px 9px rgba(254,174,150,0.06), 0px 12px 7px rgba(254,174,150,0.06), 0px 5px 5px rgba(254,174,150,0.06), 0px 1px 3px rgba(254,174,150,0.06)",
@@ -64,7 +65,7 @@ export default function MagneticButton({
   return (
     <Component
       ref={ref as never}
-      className={`${baseStyles} ${variantStyles} ${className}`}
+      className={cn(baseStyles, variantStyles, className)}
       style={{
         x: springX,
         y: springY,

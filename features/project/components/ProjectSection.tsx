@@ -1,25 +1,8 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 60 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] },
-  },
-};
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.25, 0.1, 0.25, 1] },
-  },
-};
+import { PixelImage } from "@/components/ui/PixelImage";
 
 interface ProjectSectionProps {
   className?: string;
@@ -28,8 +11,27 @@ interface ProjectSectionProps {
 }
 
 const ProjectSection = ({ className, navEntrance = false }: ProjectSectionProps): React.JSX.Element => {
+  const shouldReduceMotion = useReducedMotion();
   const delay = navEntrance ? 1.8 : 0.3;
   const containerDelay = navEntrance ? 1.9 : 0.4;
+
+  const fadeUp: Variants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 60 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: shouldReduceMotion ? 0.3 : 0.7, ease: [0.25, 0.1, 0.25, 1] },
+    },
+  };
+
+  const cardVariants: Variants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: shouldReduceMotion ? 0.3 : 0.7, ease: [0.25, 0.1, 0.25, 1] },
+    },
+  };
 
   const containerVariants: Variants = {
     hidden: {},
@@ -46,6 +48,7 @@ const ProjectSection = ({ className, navEntrance = false }: ProjectSectionProps)
       id: 1,
       title: "Portofolio PPL Digital",
       desc: "Website portofolio yang dikembangkan untuk mendokumentasikan kegiatan Praktik Pengalaman Lapangan (PPL), perangkat pembelajaran, refleksi mengajar, dan proses pengembangan kompetensi sebagai calon guru profesional.",
+      url: "https://ppl-hasmunandar.vercel.app/",
     },
     {
       id: 2,
@@ -55,7 +58,7 @@ const ProjectSection = ({ className, navEntrance = false }: ProjectSectionProps)
   ];
 
   return (
-    <section className={cn("min-h-screen relative overflow-hidden", className)}>
+    <section className={cn("min-h-dvh relative overflow-hidden", className)}>
       {/* PROJECT watermark */}
       <span className="absolute top-[-60px] sm:top-[-80px] lg:top-[-157px] right-0 text-[36px] sm:text-[50px] lg:text-[80px] font-light text-interaction/15 font-heading select-none pointer-events-none">
         PROJECT
@@ -67,9 +70,9 @@ const ProjectSection = ({ className, navEntrance = false }: ProjectSectionProps)
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.3 }}
-            transition={{ duration: 0.7, ease: [0.25, 0.1, 0.25, 1], delay }}
-            className="text-[22px] sm:text-[30px] lg:text-[45px] font-bold text-text-primary font-heading mb-6 lg:mb-10"
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: shouldReduceMotion ? 0.3 : 0.7, ease: [0.25, 0.1, 0.25, 1], delay }}
+            className="text-[22px] sm:text-[30px] lg:text-[45px] font-bold text-text-primary font-heading mb-6 lg:mb-10 text-balance"
           >
             Apa yang telah saya kerjakan?
           </motion.p>
@@ -78,21 +81,22 @@ const ProjectSection = ({ className, navEntrance = false }: ProjectSectionProps)
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.2 }}
             className="flex flex-col gap-10 lg:gap-12"
           >
-            {projects.map((item) => (
+            {projects.map((item, index) => (
               <motion.div
                 key={item.id}
                 variants={cardVariants}
                 className="flex flex-col sm:flex-row items-start gap-6 sm:gap-8 lg:gap-12"
               >
                 {/* Thumbnail */}
-                <div className="w-full sm:w-[240px] lg:w-[411px] h-[200px] sm:h-[210px] lg:h-[294px] shrink-0 bg-text-primary/10 rounded-xl flex items-center justify-center">
-                  <span className="text-text-primary/30 font-body text-sm">
-                    Placeholder {item.id}
-                  </span>
-                </div>
+                <PixelImage
+                  src={`/images/project0${item.id}.webp`}
+                  alt={item.title}
+                  startDelay={(navEntrance ? 1900 : 400) + index * 200}
+                  className="w-full sm:w-[240px] lg:w-[411px] h-[200px] sm:h-[210px] lg:h-[294px] shrink-0"
+                />
 
                 {/* Text */}
                 <div className="flex flex-col flex-1 gap-2 sm:h-auto lg:h-[294px]">
@@ -108,26 +112,37 @@ const ProjectSection = ({ className, navEntrance = false }: ProjectSectionProps)
                   >
                     {item.title}
                   </p>
-                  <p className="font-body text-[13px] sm:text-[15px] lg:text-[20px] text-text-primary/80 leading-relaxed">
+                  <p className="font-body text-[13px] sm:text-[15px] lg:text-[20px] text-text-primary/80 leading-relaxed text-pretty">
                     {item.desc}
                   </p>
-                  <p className="font-body text-[13px] sm:text-[15px] lg:text-[20px] text-text-primary/60 mt-auto pt-3 sm:pt-4">
-                    Ke halaman{" "}
-                    <svg
-                      className="inline-block -rotate-45 ml-1"
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                  {item.url ? (
+                    <a
+                      href={item.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-body text-[13px] sm:text-[15px] lg:text-[20px] text-text-primary/60 mt-auto pt-3 sm:pt-4 hover:text-interaction transition-colors cursor-pointer"
                     >
-                      <path d="M7 17L17 7" />
-                      <path d="M7 7h10v10" />
-                    </svg>
-                  </p>
+                      Ke halaman{" "}
+                      <svg
+                        className="inline-block -rotate-45 ml-1"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M7 17L17 7" />
+                        <path d="M7 7h10v10" />
+                      </svg>
+                    </a>
+                  ) : (
+                    <p className="font-body text-[13px] sm:text-[15px] lg:text-[20px] text-text-primary/50 mt-auto pt-3 sm:pt-4 italic select-none">
+                      Segera tersedia
+                    </p>
+                  )}
                 </div>
               </motion.div>
             ))}

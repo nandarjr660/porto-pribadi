@@ -38,7 +38,7 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
     const tl = gsap.timeline({ paused: true });
 
     tl.to(nav, {
-      height: "100vh",
+      height: "100dvh",
       duration: 0.8,
       ease: "power2.out",
     })
@@ -237,7 +237,7 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
         {/* Hamburger Menu */}
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="hamburger-container flex flex-col justify-center items-center w-[36px] h-[36px] sm:w-[44px] sm:h-[44px] gap-[5px] sm:gap-[6px] cursor-pointer z-50 relative"
+          className="hamburger-container flex flex-col justify-center items-center size-[36px] sm:size-[44px] gap-[5px] sm:gap-[6px] cursor-pointer z-50 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction focus-visible:ring-offset-2 rounded-md"
           aria-label="Toggle menu"
         >
           <span
@@ -275,7 +275,7 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
               <a
                 key={item}
                 href={item.toLowerCase()}
-                className="menu-item group relative text-text-primary font-heading font-bold text-[58px] sm:text-[68px] md:text-[72px] lg:text-[96px] leading-none transition-colors duration-200"
+                className="menu-item group relative text-text-primary font-heading font-bold text-[58px] sm:text-[68px] md:text-[72px] lg:text-[96px] leading-none transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction focus-visible:ring-offset-4 rounded-lg"
                 onClick={(e) => handleMenuClick(e, item)}
                 onMouseMove={(e) => handleMenuMouseMove(e, item)}
               >
@@ -308,7 +308,7 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
         {/* Portrait - hidden on mobile/tablet, visible on desktop */}
         <div
           className={cn(
-            "portrait hidden lg:block absolute right-[88px] top-1/2 -translate-y-1/2 mt-[-80px] cursor-pointer transition-transform duration-300",
+            "portrait hidden lg:block absolute right-[338px] top-1/2 -translate-y-1/2 mt-[-230px] cursor-pointer transition-transform duration-300",
             isPortraitClicked && "scale-[1.05]"
           )}
           style={{ opacity: 0 }}
@@ -337,7 +337,7 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
               href={social.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-text-primary/60 font-heading font-normal text-[14px] sm:text-[16px] lg:text-[20px] hover:text-interaction transition-colors duration-200"
+              className="text-text-primary/60 font-heading font-normal text-[14px] sm:text-[16px] lg:text-[20px] hover:text-interaction transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction rounded"
               aria-label={social.name}
             >
               {social.name}
@@ -348,7 +348,7 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
         {/* Empty Area Hint */}
         {emptyAreaHint && (
           <span
-            className="absolute text-text-primary/40 font-body text-[14px] pointer-events-none -translate-x-1/2 -translate-y-1/2"
+            className="absolute text-text-primary/60 font-body text-[14px] pointer-events-none -translate-x-1/2 -translate-y-1/2"
             style={{ left: hintPosition.x, top: hintPosition.y }}
           >
             Klik lagi untuk keluar

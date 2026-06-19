@@ -1,49 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useAnimation, AnimatePresence, useScroll, useTransform, useMotionTemplate } from "framer-motion";
+import { motion, useAnimation, AnimatePresence, useScroll, useTransform, useMotionTemplate, useReducedMotion } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 
 interface AboutSectionProps {
   entranceTrigger?: number;
   navEntrance?: boolean;
 }
-
-const makeSlideFromLeft = (delay: number) => ({
-  hidden: { opacity: 0, x: -60 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.7, delay },
-  },
-});
-
-const makeSlideFromRight = (delay: number) => ({
-  hidden: { opacity: 0, x: 60 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.7, delay },
-  },
-});
-
-const makeFadeUp = (delay: number) => ({
-  hidden: { opacity: 0, y: 60 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, delay },
-  },
-});
-
-const makeScaleIn = (delay: number) => ({
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.6, delay },
-  },
-});
 
 const blurIn = {
   opacity: 1,
@@ -57,15 +21,49 @@ const blurOut = {
 };
 
 const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Element => {
+  const shouldReduceMotion = useReducedMotion();
+
   // Delay 1.8s saat masuk via navbar (menunggu animasi close navbar selesai sepenuhnya + 1s delay)
   const introDelay = navEntrance
     ? { heading: 1.8, main: 1.9, quote: 2.1 }
     : { heading: 0.3, main: 0.4, quote: 0.6 };
 
-  const slideFromLeft = makeSlideFromLeft(introDelay.main);
-  const slideFromRight = makeSlideFromRight(introDelay.main);
-  const fadeUp = makeFadeUp(introDelay.heading);
-  const scaleIn = makeScaleIn(introDelay.quote);
+  const slideFromLeft = {
+    hidden: { opacity: 0, x: shouldReduceMotion ? 0 : -60 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: shouldReduceMotion ? 0.3 : 0.7, delay: introDelay.main },
+    },
+  };
+
+  const slideFromRight = {
+    hidden: { opacity: 0, x: shouldReduceMotion ? 0 : 60 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: shouldReduceMotion ? 0.3 : 0.7, delay: introDelay.main },
+    },
+  };
+
+  const fadeUp = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 60 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: shouldReduceMotion ? 0.3 : 0.7, delay: introDelay.heading },
+    },
+  };
+
+  const scaleIn = {
+    hidden: { opacity: 0, scale: shouldReduceMotion ? 1 : 0.95 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: shouldReduceMotion ? 0.2 : 0.6, delay: introDelay.quote },
+    },
+  };
+
   const roadmapRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
@@ -74,7 +72,7 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
   });
 
   const clipPercent = useTransform(scrollYProgress, [0.15, 0.85], [100, 0]);
-  const clipPath = useMotionTemplate`inset(0% 0% ${clipPercent}% 0%)`;
+  const clipPath = useMotionTemplate`inset(0% 0% ${shouldReduceMotion ? 0 : clipPercent}% 0%)`;
 
   const card1Controls = useAnimation();
   const card2Controls = useAnimation();
@@ -117,6 +115,27 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
 
     const unsubscribe = scrollYProgress.on("change", (latest) => {
       if (!active) return;
+
+      if (shouldReduceMotion) {
+        card1Controls.start({
+          clipPath: "inset(0% 0% 0% 0%)",
+          transition: { duration: 0.1 },
+        });
+        c1Item1.start({ opacity: 1, filter: "blur(0px)", transition: { duration: 0.1 } });
+        c1Item2.start({ opacity: 1, filter: "blur(0px)", transition: { duration: 0.1 } });
+        c1Item3.start({ opacity: 1, filter: "blur(0px)", transition: { duration: 0.1 } });
+        c1Item4.start({ opacity: 1, filter: "blur(0px)", transition: { duration: 0.1 } });
+
+        card2Controls.start({
+          clipPath: "inset(0% 0% 0% 0%)",
+          transition: { duration: 0.1 },
+        });
+        c2Item1.start({ opacity: 1, filter: "blur(0px)", transition: { duration: 0.1 } });
+        c2Item2.start({ opacity: 1, filter: "blur(0px)", transition: { duration: 0.1 } });
+        c2Item3.start({ opacity: 1, filter: "blur(0px)", transition: { duration: 0.1 } });
+        c2Item4.start({ opacity: 1, filter: "blur(0px)", transition: { duration: 0.1 } });
+        return;
+      }
 
       // Card 1 triggers when progress passes 0.35
       if (latest > 0.35) {
@@ -165,7 +184,7 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
       active = false;
       unsubscribe();
     };
-  }, [scrollYProgress, card1Controls, card2Controls, c1Item1, c1Item2, c1Item3, c1Item4, c2Item1, c2Item2, c2Item3, c2Item4]);
+  }, [scrollYProgress, card1Controls, card2Controls, c1Item1, c1Item2, c1Item3, c1Item4, c2Item1, c2Item2, c2Item3, c2Item4, shouldReduceMotion]);
 
   return (
     <section id="about" className="bg-background pt-[56px] sm:pt-[70px]">
@@ -177,8 +196,8 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.3 }}
-            className="text-[22px] sm:text-[30px] lg:text-[45px] font-bold text-text-primary font-heading mb-6 lg:mb-10"
+            viewport={{ once: true, amount: 0.3 }}
+            className="text-[22px] sm:text-[30px] lg:text-[45px] font-bold text-text-primary font-heading mb-6 lg:mb-10 text-balance"
           >
             Siapa saya?
           </motion.p>
@@ -190,10 +209,10 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
               variants={slideFromLeft}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: false, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.3 }}
               className="flex flex-col gap-4 lg:gap-5"
             >
-              <h2 className="text-[32px] sm:text-[48px] lg:text-[70px] font-bold text-text-primary leading-[0.9] font-heading">
+              <h2 className="text-[32px] sm:text-[48px] lg:text-[70px] font-bold text-text-primary leading-[0.9] font-heading text-balance">
                 HASMUNANDAR
               </h2>
 
@@ -217,7 +236,7 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
               variants={slideFromRight}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: false, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.3 }}
               className="relative flex justify-center lg:justify-end lg:pr-[200px] overflow-hidden"
             >
               {/* ABOUT watermark */}
@@ -245,22 +264,22 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
               <motion.div
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.5, ease: "easeOut", delay: introDelay.heading + 0.1 }}
                 className="h-[2px] flex-1 bg-interaction origin-right"
               />
               <motion.div
                 initial={{ opacity: 0, scale: 0 }}
                 whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.4, ease: "easeOut", delay: 0.35 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.4, ease: "easeOut", delay: introDelay.heading + 0.3 }}
                 className="w-2 h-2 rounded-full bg-interaction shrink-0"
               />
               <motion.div
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
-                viewport={{ once: false, amount: 0.3 }}
-                transition={{ duration: 0.5, ease: "easeOut", delay: 0.6 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.5, ease: "easeOut", delay: introDelay.heading + 0.6 }}
                 className="h-[2px] flex-1 bg-interaction origin-left"
               />
             </div>
@@ -269,10 +288,10 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
               variants={scaleIn}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: false, amount: 0.3 }}
+              viewport={{ once: true, amount: 0.3 }}
               className="text-center max-w-[600px] px-2"
             >
-              <p className="text-[15px] sm:text-[18px] lg:text-[26px] text-text-primary italic font-body leading-relaxed">
+              <p className="text-[15px] sm:text-[18px] lg:text-[26px] text-text-primary italic font-body leading-relaxed text-pretty">
                 &ldquo;Pendidikan tidak mengubah dunia, Pendidikan merubah
                 manusia, Manusia merubah dunia&rdquo;
               </p>
@@ -287,7 +306,7 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
       {/* Roadmap */}
       <div ref={roadmapRef} className="flex flex-col items-center justify-center min-h-[500px] lg:min-h-[700px]">
         <div className="w-full px-6 sm:px-8 lg:px-[88px] max-w-[1440px] mx-auto">
-          <p className="text-[22px] sm:text-[30px] lg:text-[45px] font-bold text-text-primary font-heading mb-6 lg:mb-10">
+          <p className="text-[22px] sm:text-[30px] lg:text-[45px] font-bold text-text-primary font-heading mb-6 lg:mb-10 text-balance">
             Bagaimana perjalanan saya?
           </p>
 
@@ -305,7 +324,7 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
                 {/* Background Roadmap Image */}
                 <motion.div style={{ clipPath }} className="absolute inset-0 z-0">
                   <Image
-                    src="/images/roadmap.png"
+                    src="/images/roadmap.webp"
                     alt="Roadmap Perjalanan"
                     fill
                     className="object-contain"
@@ -469,8 +488,8 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.3 }}
-            className="text-[22px] sm:text-[30px] lg:text-[45px] font-bold text-text-primary font-heading mb-6 lg:mb-[68px]"
+            viewport={{ once: true, amount: 0.3 }}
+            className="text-[22px] sm:text-[30px] lg:text-[45px] font-bold text-text-primary font-heading mb-6 lg:mb-[68px] text-balance"
           >
             Apa yang saya kuasai?
           </motion.p>
@@ -478,14 +497,14 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
           {/* Skill Item 1 */}
           <div>
             <button
-              className="text-left w-full"
+              className="text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction rounded-lg transition-shadow"
               onClick={() => setExpandedSkill(expandedSkill === 0 ? null : 0)}
             >
               <motion.p
                 variants={fadeUp}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: false, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
             className="text-[18px] xs:text-[20px] sm:text-[28px] lg:text-[50px] font-bold text-text-primary font-heading uppercase mb-4 sm:mb-6 lg:mb-10 cursor-pointer"
               >
                 Kompetensi guru profesional
@@ -512,14 +531,14 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
               <motion.div
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
-                viewport={{ once: false, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="w-full h-[5px] bg-text-primary origin-left"
               ></motion.div>
               <motion.span
                 initial={{ opacity: 0, scale: 0.5 }}
                 whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: false, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.4, delay: 0.6 }}
                 className="absolute right-0 top-[-44px] sm:top-[-54px] lg:top-[-60px] w-[28px] sm:w-[30px] h-[28px] sm:h-[30px] flex items-center justify-center text-text-primary font-black text-[32px] sm:text-[36px] lg:text-[40px] leading-none"
               >
@@ -531,14 +550,14 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
           {/* Skill Item 2 */}
           <div>
             <button
-              className="text-left w-full"
+              className="text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction rounded-lg transition-shadow"
               onClick={() => setExpandedSkill(expandedSkill === 1 ? null : 1)}
             >
               <motion.p
                 variants={fadeUp}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: false, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
             className="text-[18px] xs:text-[20px] sm:text-[28px] lg:text-[50px] font-bold text-text-primary font-heading uppercase mb-4 sm:mb-6 lg:mb-10 cursor-pointer"
               >
                 Pemanfaatan teknologi pendidikan
@@ -565,14 +584,14 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
               <motion.div
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
-                viewport={{ once: false, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="w-full h-[5px] bg-text-primary origin-left"
               ></motion.div>
               <motion.span
                 initial={{ opacity: 0, scale: 0.5 }}
                 whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: false, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.4, delay: 0.6 }}
                 className="absolute right-0 top-[-44px] sm:top-[-54px] lg:top-[-60px] w-[28px] sm:w-[30px] h-[28px] sm:h-[30px] flex items-center justify-center text-text-primary font-black text-[32px] sm:text-[36px] lg:text-[40px] leading-none"
               >
@@ -584,14 +603,14 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
           {/* Skill Item 3 */}
           <div>
             <button
-              className="text-left w-full"
+              className="text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction rounded-lg transition-shadow"
               onClick={() => setExpandedSkill(expandedSkill === 2 ? null : 2)}
             >
               <motion.p
                 variants={fadeUp}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: false, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
             className="text-[18px] xs:text-[20px] sm:text-[28px] lg:text-[50px] font-bold text-text-primary font-heading uppercase mb-4 sm:mb-6 lg:mb-10 cursor-pointer"
               >
                 Pengembangan media pembelajaran
@@ -618,14 +637,14 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
               <motion.div
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
-                viewport={{ once: false, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="w-full h-[5px] bg-text-primary origin-left"
               ></motion.div>
               <motion.span
                 initial={{ opacity: 0, scale: 0.5 }}
                 whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: false, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.4, delay: 0.6 }}
                 className="absolute right-0 top-[-44px] sm:top-[-54px] lg:top-[-60px] w-[28px] sm:w-[30px] h-[28px] sm:h-[30px] flex items-center justify-center text-text-primary font-black text-[32px] sm:text-[36px] lg:text-[40px] leading-none"
               >
@@ -635,7 +654,7 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
           </div>
 
         </div>
-        <p className="absolute bottom-6 sm:bottom-10 left-0 right-0 text-center text-sm sm:text-[16px] lg:text-[18px] font-light text-text-primary/40 font-body">
+        <p className="absolute bottom-6 sm:bottom-10 left-0 right-0 text-center text-sm sm:text-[16px] lg:text-[18px] font-light text-text-primary/60 font-body">
           Belajar akan menambah kemampuanmu
         </p>
       </div>

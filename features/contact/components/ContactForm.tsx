@@ -37,32 +37,44 @@ export default function ContactForm() {
       className="flex flex-col gap-5 w-full max-w-[700px] mt-6"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
-        <input 
-          type="text" 
-          name="name" 
-          placeholder="Nama Anda"
-          required
-          className="bg-interaction/10 border border-interaction/30 rounded-[9px] px-4 sm:px-5 py-3 text-sm sm:text-base text-text-primary placeholder:text-text-primary/50 font-body focus:outline-none focus:border-interaction focus:ring-1 focus:ring-interaction transition-colors"
-        />
-        <input 
-          type="email" 
-          name="email" 
-          placeholder="Email Anda"
-          required
-          className="bg-interaction/10 border border-interaction/30 rounded-[9px] px-4 sm:px-5 py-3 text-sm sm:text-base text-text-primary placeholder:text-text-primary/50 font-body focus:outline-none focus:border-interaction focus:ring-1 focus:ring-interaction transition-colors"
-        />
+        <div className="flex flex-col gap-1.5 w-full">
+          <label htmlFor="contact-name" className="text-xs sm:text-sm font-semibold text-text-primary/70 font-body">Nama Anda</label>
+          <input 
+            id="contact-name"
+            type="text" 
+            name="name" 
+            placeholder="Nama Anda"
+            required
+            className="bg-interaction/10 border border-interaction/30 rounded-[9px] px-4 sm:px-5 py-3 text-sm sm:text-base text-text-primary placeholder:text-text-primary/50 font-body focus:outline-none focus:border-interaction focus:ring-1 focus:ring-interaction transition-colors"
+          />
+        </div>
+        <div className="flex flex-col gap-1.5 w-full">
+          <label htmlFor="contact-email" className="text-xs sm:text-sm font-semibold text-text-primary/70 font-body">Email Anda</label>
+          <input 
+            id="contact-email"
+            type="email" 
+            name="email" 
+            placeholder="Email Anda"
+            required
+            className="bg-interaction/10 border border-interaction/30 rounded-[9px] px-4 sm:px-5 py-3 text-sm sm:text-base text-text-primary placeholder:text-text-primary/50 font-body focus:outline-none focus:border-interaction focus:ring-1 focus:ring-interaction transition-colors"
+          />
+        </div>
       </div>
-      <textarea 
-        name="message" 
-        placeholder="Pesan Anda"
-        required 
-        rows={5}
-        className="bg-interaction/10 border border-interaction/30 rounded-[9px] px-4 sm:px-5 py-3 text-sm sm:text-base text-text-primary placeholder:text-text-primary/50 font-body focus:outline-none focus:border-interaction focus:ring-1 focus:ring-interaction transition-colors resize-none"
-      ></textarea>
+      <div className="flex flex-col gap-1.5 w-full">
+        <label htmlFor="contact-message" className="text-xs sm:text-sm font-semibold text-text-primary/70 font-body">Pesan Anda</label>
+        <textarea 
+          id="contact-message"
+          name="message" 
+          placeholder="Pesan Anda"
+          required 
+          rows={5}
+          className="bg-interaction/10 border border-interaction/30 rounded-[9px] px-4 sm:px-5 py-3 text-sm sm:text-base text-text-primary placeholder:text-text-primary/50 font-body focus:outline-none focus:border-interaction focus:ring-1 focus:ring-interaction transition-colors resize-none"
+        ></textarea>
+      </div>
       <div className="flex items-center gap-5">
         <button 
           type="submit"
-          className="bg-interaction text-background font-body font-semibold px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-[9px] hover:bg-interaction/90 transition-colors shadow-lg"
+          className="bg-interaction text-background font-body font-semibold px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-[9px] hover:bg-interaction/90 transition-colors shadow-lg cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction focus-visible:ring-offset-2 outline-none"
         >
           Kirim Pesan
         </button>

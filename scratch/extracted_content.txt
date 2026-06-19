@@ -1,0 +1,14 @@
+Saya telah mengakses direktori **`C:\Users\Hype AMD\.agents\skills`** dan membaca file manifest (`.antigravity-install-manifest.json`) serta isi dari beberapa skill utama yang relevan dengan pengembangan portfolio Anda.
+
+Berikut adalah ringkasan dari apa yang terdapat di dalam direktori tersebut:
+
+### 1. Informasi Umum
+* **Jumlah Skill Terinstal**: Terdapat **190 direktori skill** yang mencakup berbagai teknologi (React, Next.js, Angular, Python, database, keamanan, dll.) serta desain UI/UX.
+* **Struktur**: Setiap folder skill memiliki file panduan **`SKILL.md`** yang berisi instruksi spesifik, batasan (*limitations*), dan referensi implementasi.
+
+---
+
+### 2. Skill UI/UX & Animasi yang Relevan untuk Portfolio Anda
+Beberapa skill yang sangat cocok untuk diterapkan pada project portfolio Anda (`nandar-portfolio`) meliputi:
+
+<truncated 1225 bytes>

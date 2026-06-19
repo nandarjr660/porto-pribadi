@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface SocialLink {
   name: string;
@@ -53,6 +54,7 @@ const defaultLinks: SocialLink[] = [
   },
 ];
 
+
 interface SocialLinksProps {
   links?: SocialLink[];
   className?: string;
@@ -63,14 +65,14 @@ const SocialLinks = ({
   className = "",
 }: SocialLinksProps): React.JSX.Element => {
   return (
-    <div className={`flex items-center gap-[21px] ${className}`}>
+    <div className={cn("flex items-center gap-[21px]", className)}>
       {links.map((link) => (
         <motion.a
           key={link.name}
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center w-[36px] h-[36px] sm:w-[39px] sm:h-[39px] rounded-full bg-interaction text-background transition-colors duration-150 ease-out"
+          className="flex items-center justify-center size-[40px] sm:size-[44px] rounded-full bg-interaction text-background transition-colors duration-150 ease-out cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction focus-visible:ring-offset-2"
           whileHover={{ scale: 1.1, backgroundColor: link.hoverColor }}
           whileTap={{ scale: 0.9 }}
           aria-label={link.name}

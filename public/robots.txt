@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /api/
-Sitemap: https://nandar-portfolio.vercel.app/sitemap.xml
+
+Sitemap: https://hsmnandar.vercel.app/sitemap.xml

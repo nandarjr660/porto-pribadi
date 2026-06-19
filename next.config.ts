@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: '**.vercel.app' },
     ],
+    formats: ['image/webp'],
+    deviceSizes: [411, 640, 768, 1024, 1280, 1440],
+    imageSizes: [240, 384],
+    minimumCacheTTL: 31536000,
   },
   async rewrites() {
     return [

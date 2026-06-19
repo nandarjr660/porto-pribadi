@@ -7,8 +7,8 @@ export const metadata = {
 
 export default function MaintenancePage() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-6">
-      <div className="relative w-[250px] h-[250px] sm:w-[300px] sm:h-[300px] lg:w-[350px] lg:h-[350px]">
+    <main className="min-h-dvh flex flex-col items-center justify-center px-6">
+      <div className="relative size-[250px] sm:size-[300px] lg:size-[350px]">
         <Image
           src="/images/mainten.gif"
           alt="Under maintenance"
