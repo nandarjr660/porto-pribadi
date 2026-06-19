@@ -214,6 +214,7 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
         <div
           className="logo-container text-text-primary font-body font-extrabold text-[20px] sm:text-[24px] leading-none tracking-tight cursor-pointer"
           onClick={() => {
+            setIsOpen(false);
             const target = "home";
             const currentPath = window.location.pathname.replace("/", "").toLowerCase();
             const isValidPath = ["", "home", "about", "project", "contact"].includes(currentPath);
