@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export default function Error({
   reset,
 }: {
@@ -23,8 +25,17 @@ export default function Error({
       >
         Coba Lagi
       </button>
-      <div className="absolute top-6 left-[88px] max-lg:left-8 max-md:left-6 text-text-primary font-body font-extrabold text-[24px]">
-        NAND.
+      <div className="absolute top-6 left-[88px] max-lg:left-8 max-md:left-6 flex items-center gap-2">
+        <Image
+          src="/logo.svg"
+          alt="NAND. Logo"
+          width={80}
+          height={32}
+          className="h-[28px] w-auto object-contain"
+        />
+        <span className="text-text-primary font-body font-extrabold text-[20px] leading-none tracking-tight">
+          NAND.
+        </span>
       </div>
     </div>
   );

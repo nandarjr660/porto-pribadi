@@ -1,36 +1,24 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 interface ToastState {
   show: boolean;
   type: "success" | "error";
 }
 
-type Phase = "idle" | "circle" | "capsule" | "content" | "shrink" | "exit";
-
 export default function ContactForm() {
   const [isSending, setIsSending] = useState(false);
   const [toast, setToast] = useState<ToastState | null>(null);
-  const [phase, setPhase] = useState<Phase>("idle");
   const [windowWidth, setWindowWidth] = useState(() => 
     typeof window !== "undefined" ? window.innerWidth : 380
   );
 
-  const timeoutsRef = useRef<NodeJS.Timeout[]>([]);
+  const shouldReduceMotion = useReducedMotion();
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const addTimeout = (cb: () => void, delay: number) => {
-    const id = setTimeout(cb, delay);
-    timeoutsRef.current.push(id);
-  };
-
-  const clearAllTimeouts = () => {
-    timeoutsRef.current.forEach(clearTimeout);
-    timeoutsRef.current = [];
-  };
-
-  // Resize listener for responsive layout size values
+  // Resize listener for layout size values
   useEffect(() => {
     if (typeof window !== "undefined") {
       const handleResize = () => setWindowWidth(window.innerWidth);
@@ -39,55 +27,30 @@ export default function ContactForm() {
     }
   }, []);
 
-  // Clean up timeouts on component unmount
+  // Clean up timeout on component unmount
   useEffect(() => {
-    return () => clearAllTimeouts();
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
   }, []);
 
-  // Orchestrate the reverse outro sequence when toast is dismissed
   const handleDismiss = () => {
-    clearAllTimeouts();
-
-    // 1. Fade out the text contents (capsule shape remains)
-    setPhase("capsule");
-
-    // 2. Shrink back to the circle shape
-    addTimeout(() => {
-      setPhase("shrink");
-    }, 350);
-
-    // 3. Fade out the circle and translate up
-    addTimeout(() => {
-      setPhase("exit");
-    }, 850);
-
-    // 4. Unmount the toast component
-    addTimeout(() => {
-      setToast(null);
-      setPhase("idle");
-    }, 1150);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setToast(null);
   };
 
-  // Trigger and orchestrate the intro sequence when toast is activated
   const triggerToast = (type: "success" | "error") => {
-    clearAllTimeouts();
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
     setToast({ show: true, type });
-    setPhase("circle");
 
-    // 1. Expand to capsule shape
-    addTimeout(() => {
-      setPhase("capsule");
-    }, 450);
-
-    // 2. Show rich content (text + icons)
-    addTimeout(() => {
-      setPhase("content");
-    }, 950);
-
-    // 3. Auto-dismiss timer after 6.5 seconds of visibility
-    addTimeout(() => {
-      handleDismiss();
-    }, 6500);
+    timeoutRef.current = setTimeout(() => {
+      setToast(null);
+    }, 6000);
   };
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -114,68 +77,6 @@ export default function ContactForm() {
       triggerToast("error");
     } finally {
       setIsSending(false);
-    }
-  };
-
-  // Compute container style (padding is moved to the child to prevent layout squeeze glitches)
-  const getContainerStyle = () => {
-    const targetWidth = windowWidth < 640 ? "92vw" : "420px";
-
-    switch (phase) {
-      case "circle":
-        return {
-          width: "80px",
-          height: "80px",
-          borderRadius: "9999px",
-          padding: "0px",
-          opacity: 1,
-          y: 0,
-        };
-      case "capsule":
-        return {
-          width: targetWidth,
-          height: "80px",
-          borderRadius: "9999px",
-          padding: "0px",
-          opacity: 1,
-          y: 0,
-        };
-      case "content":
-        return {
-          width: targetWidth,
-          height: "80px",
-          borderRadius: "40px",
-          padding: "0px",
-          opacity: 1,
-          y: 0,
-        };
-      case "shrink":
-        return {
-          width: "80px",
-          height: "80px",
-          borderRadius: "9999px",
-          padding: "0px",
-          opacity: 1,
-          y: 0,
-        };
-      case "exit":
-        return {
-          width: "80px",
-          height: "80px",
-          borderRadius: "9999px",
-          padding: "0px",
-          opacity: 0,
-          y: -40,
-        };
-      default:
-        return {
-          width: "80px",
-          height: "80px",
-          borderRadius: "9999px",
-          padding: "0px",
-          opacity: 0,
-          y: -40,
-        };
     }
   };
 
@@ -231,59 +132,56 @@ export default function ContactForm() {
         </div>
       </motion.form>
 
-      {/* Dynamic Island Toast Notification */}
+      {/* Slide-in Toast Notification */}
       <AnimatePresence>
         {toast && toast.show && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.5, y: -40 }}
-            animate={getContainerStyle()}
-            style={{ x: "-50%" }}
-            transition={{ 
-              type: "spring", 
-              stiffness: 220, 
-              damping: 18 
+            initial={
+              shouldReduceMotion 
+                ? { opacity: 0 } 
+                : windowWidth < 640 
+                  ? { opacity: 0, y: 80 } 
+                  : { opacity: 0, x: 80 }
+            }
+            animate={
+              shouldReduceMotion 
+                ? { opacity: 1 } 
+                : windowWidth < 640 
+                  ? { opacity: 1, y: 0 } 
+                  : { opacity: 1, x: 0 }
+            }
+            exit={
+              shouldReduceMotion 
+                ? { opacity: 0 } 
+                : windowWidth < 640 
+                  ? { opacity: 0, y: 80 } 
+                  : { opacity: 0, x: 80 }
+            }
+            transition={{
+              type: "spring",
+              stiffness: 260,
+              damping: 24
             }}
-            className="fixed top-6 left-1/2 z-9999 flex items-center justify-center bg-text-primary text-background border border-interaction/20 shadow-[0_12px_40px_rgba(1,50,55,0.35)] origin-center overflow-hidden"
+            className="fixed bottom-6 right-6 left-6 sm:left-auto z-9999 max-w-[420px] bg-background/95 backdrop-blur-md text-text-primary rounded-xl shadow-[0_10px_30px_rgba(1,50,55,0.12)] border border-text-primary/10 overflow-hidden"
           >
-            {/* 
-              Continuous content layout (opacity/scale/y mapped directly to phase values.
-              Padding is placed here to avoid squeeze artifacts during stretching phase).
-            */}
-            <motion.div
-              animate={{ 
-                opacity: phase === "content" ? 1 : 0, 
-                scale: phase === "content" ? 1 : 0.92,
-                y: phase === "content" ? 0 : 6
-              }}
-              transition={{ 
-                duration: 0.32, 
-                ease: [0.25, 1, 0.5, 1] 
-              }}
-              style={{
-                pointerEvents: phase === "content" ? "auto" : "none",
-                visibility: (phase === "content" || phase === "capsule") ? "visible" : "hidden"
-              }}
-              className="px-7 sm:px-8 flex items-center justify-between w-full h-full select-none"
-            >
-              {/* Text on the Left */}
-              <span className="font-heading font-black text-lg sm:text-xl md:text-[22px] tracking-wide text-white uppercase">
-                {toast.type === "success" ? "Berhasil mengirim" : "Gagal mengirim"}
-              </span>
-
-              {/* Glowing Clickable Status Logo on the Right */}
-              <button
-                onClick={handleDismiss}
-                className="cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-interaction rounded-full transition-transform hover:scale-105 active:scale-95"
-                aria-label="Tutup notifikasi"
-              >
+            {/* Colored Accent Stripe on the Left */}
+            <div 
+              className={`absolute left-0 top-0 bottom-0 w-[5px] ${
+                toast.type === "success" ? "bg-emerald-500" : "bg-rose-500"
+              }`} 
+            />
+            
+            <div className="pl-6 pr-5 py-4 flex items-start gap-4">
+              {/* Icon Container */}
+              <div className="shrink-0 mt-0.5">
                 {toast.type === "success" ? (
-                  <div className="flex items-center justify-center size-9 bg-emerald-500/20 rounded-full shrink-0 border border-emerald-500/30 shadow-[0_0_12px_rgba(16,185,129,0.6)] hover:bg-emerald-500/30 transition-colors">
+                  <div className="flex items-center justify-center size-9 rounded-lg bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
                     <svg
-                      className="size-5 text-emerald-400"
+                      className="size-5"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      strokeWidth="3.5"
+                      strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
@@ -291,23 +189,56 @@ export default function ContactForm() {
                     </svg>
                   </div>
                 ) : (
-                  <div className="flex items-center justify-center size-9 bg-rose-500/20 rounded-full shrink-0 border border-rose-500/30 shadow-[0_0_12px_rgba(244,63,94,0.6)] hover:bg-rose-500/30 transition-colors">
+                  <div className="flex items-center justify-center size-9 rounded-lg bg-rose-500/10 text-rose-600 border border-rose-500/20">
                     <svg
-                      className="size-5 text-rose-400"
+                      className="size-5"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
-                      strokeWidth="3.5"
+                      strokeWidth="3"
                       strokeLinecap="round"
                       strokeLinejoin="round"
                     >
-                      <line x1="18" y1="6" x2="6" y2="18" />
-                      <line x1="6" y1="6" x2="18" y2="18" />
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="8" x2="12" y2="12" />
+                      <line x1="12" y1="16" x2="12.01" y2="16" />
                     </svg>
                   </div>
                 )}
+              </div>
+
+              {/* Text Container */}
+              <div className="flex-1 min-w-0 text-left">
+                <h4 className="font-heading font-bold text-sm sm:text-base text-text-primary leading-tight">
+                  {toast.type === "success" ? "Pesan Terkirim!" : "Gagal Mengirim"}
+                </h4>
+                <p className="font-body text-xs sm:text-[13px] text-text-primary/70 leading-normal mt-1 pr-2">
+                  {toast.type === "success" 
+                    ? "Terima kasih, saya akan segera menghubungi Anda." 
+                    : "Terjadi kesalahan. Silakan coba kembali."}
+                </p>
+              </div>
+
+              {/* Close Button */}
+              <button
+                onClick={handleDismiss}
+                className="shrink-0 size-7 flex items-center justify-center rounded-lg hover:bg-text-primary/5 text-text-primary/45 hover:text-text-primary/80 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-interaction"
+                aria-label="Tutup notifikasi"
+              >
+                <svg
+                  className="size-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
               </button>
-            </motion.div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

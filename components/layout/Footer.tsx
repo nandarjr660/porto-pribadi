@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface FooterProps {
@@ -13,9 +14,18 @@ const Footer = ({ className }: FooterProps): React.JSX.Element => {
       )}
     >
       <div className="w-full max-w-[1440px] mx-auto flex items-center justify-between">
-        <span className="text-text-primary font-body font-extrabold text-[24px] leading-none tracking-tight">
-          NAND.
-        </span>
+        <div className="flex items-center gap-2">
+          <Image
+            src="/logo.svg"
+            alt="NAND. Logo"
+            width={80}
+            height={32}
+            className="h-[28px] w-auto object-contain"
+          />
+          <span className="text-text-primary font-body font-extrabold text-[20px] leading-none tracking-tight">
+            NAND.
+          </span>
+        </div>
 
         <span className="text-text-primary/40 font-body font-extralight text-[14px]">
           &copy; {new Date().getFullYear()} Hasmunandar

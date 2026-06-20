@@ -194,6 +194,30 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
     []
   );
 
+  const handleLogoClick = useCallback(() => {
+    const target = "home";
+    const currentPath = window.location.pathname.replace("/", "").toLowerCase();
+    const isValidPath = ["", "home", "about", "project", "contact"].includes(currentPath);
+
+    if (isOpen) {
+      window.dispatchEvent(new CustomEvent("navbar-navigate-start"));
+      pendingSectionRef.current = target;
+      setIsOpen(false);
+    }
+
+    if (!isValidPath) {
+      window.location.href = `/${target}`;
+      return;
+    }
+
+    if (currentPath === target) {
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    } else {
+      history.pushState(null, "", `/${target}`);
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    }
+  }, [isOpen]);
+
   useEffect(() => {
     return () => {
       if (portraitTimerRef.current) clearTimeout(portraitTimerRef.current);
@@ -212,27 +236,20 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
       <div className="h-[56px] sm:h-[70px] px-[88px] max-lg:px-8 max-md:px-6 flex items-center justify-between max-w-[1440px] mx-auto">
         {/* Logo */}
         <div
-          className="logo-container text-text-primary font-body font-extrabold text-[20px] sm:text-[24px] leading-none tracking-tight cursor-pointer"
-          onClick={() => {
-            setIsOpen(false);
-            const target = "home";
-            const currentPath = window.location.pathname.replace("/", "").toLowerCase();
-            const isValidPath = ["", "home", "about", "project", "contact"].includes(currentPath);
-
-            if (!isValidPath) {
-              window.location.href = `/${target}`;
-              return;
-            }
-
-            if (currentPath === target) {
-              window.dispatchEvent(new PopStateEvent("popstate"));
-            } else {
-              history.pushState(null, "", `/${target}`);
-              window.dispatchEvent(new PopStateEvent("popstate"));
-            }
-          }}
+          className="logo-container flex items-center gap-2 cursor-pointer"
+          onClick={handleLogoClick}
         >
-          NAND.
+          <Image
+            src="/logo.svg"
+            alt="NAND. Logo"
+            width={80}
+            height={32}
+            className="h-[28px] sm:h-[34px] w-auto object-contain"
+            priority
+          />
+          <span className="text-text-primary font-body font-extrabold text-[20px] sm:text-[24px] leading-none tracking-tight">
+            NAND.
+          </span>
         </div>
 
         {/* Hamburger Menu */}
@@ -264,7 +281,10 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
 
       {/* Overlay Content */}
       <div
-        className="overlay-content absolute inset-0 h-full flex items-center px-[88px] max-lg:px-8 max-md:px-6 max-w-[1440px] mx-auto"
+        className={cn(
+          "overlay-content absolute inset-0 h-full flex items-center px-[88px] max-lg:px-8 max-md:px-6 max-w-[1440px] mx-auto",
+          !isOpen && "pointer-events-none"
+        )}
         style={{ opacity: 0 }}
         onClick={handleOverlayClick}
       >

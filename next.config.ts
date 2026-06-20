@@ -40,7 +40,7 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "img-src 'self' data: blob:",
-              "connect-src 'self'",
+              "connect-src 'self' https://api.web3forms.com",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'none'",

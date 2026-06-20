@@ -135,7 +135,7 @@ const HomeSection = ({ className, entranceTrigger, navEntrance = false }: HomeSe
             >
               <motion.div
                 ref={portraitRef}
-                className="relative w-[170px] h-[235px] xs:w-[210px] xs:h-[290px] sm:w-[285px] sm:h-[395px] md:w-[340px] md:h-[470px] lg:w-[435px] lg:h-[580px] rounded-[24px] xs:rounded-[28px] sm:rounded-[32px] lg:rounded-[50px] overflow-hidden cursor-pointer"
+                className="relative w-full h-[72vw] xs:w-[210px] xs:h-[290px] sm:w-[285px] sm:h-[395px] md:w-[340px] md:h-[470px] lg:w-[435px] lg:h-[580px] rounded-[16px] xs:rounded-[28px] sm:rounded-[32px] lg:rounded-[50px] overflow-hidden cursor-pointer"
                 whileHover="hover"
                 initial="rest"
                 variants={{
@@ -144,13 +144,23 @@ const HomeSection = ({ className, entranceTrigger, navEntrance = false }: HomeSe
                 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
               >
+                {/* Mobile: HD original photo */}
+                <Image
+                  src="/images/home1.png"
+                  alt="Hasmunandar Portrait"
+                  fill
+                  sizes="100vw"
+                  className="object-cover object-top block xs:hidden"
+                  priority
+                />
+                {/* Tablet & Desktop: compressed photo */}
                 <Image
                   src="/images/potrait.webp"
                   alt="Hasmunandar Portrait"
                   fill
-                  sizes="(max-width: 640px) 210px, (max-width: 768px) 285px, (max-width: 1024px) 340px, 435px"
-                  className="object-cover"
-                  priority
+                  sizes="(max-width: 768px) 285px, (max-width: 1024px) 340px, 435px"
+                  className="object-cover object-center hidden xs:block"
+                  loading="lazy"
                 />
               </motion.div>
             </motion.div>

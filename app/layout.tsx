@@ -63,6 +63,10 @@ export const metadata: Metadata = {
       "Portofolio digital dan perjalanan belajar Hasmunandar, mahasiswa PPG Prajabatan & PGSD, berfokus pada inovasi pembelajaran dan teknologi pendidikan.",
     images: ["/images/potrait.webp"],
   },
+  icons: {
+    icon: "/logo.svg",
+    apple: "/logo.svg",
+  },
 };
 
 function MaintenanceScreen() {
