@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { Send } from "lucide-react";
+import { AsyncButton } from "@/components/shadcnblocks/async-button";
 
 interface ToastState {
   show: boolean;
@@ -9,7 +11,7 @@ interface ToastState {
 }
 
 export default function ContactForm() {
-  const [isSending, setIsSending] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [toast, setToast] = useState<ToastState | null>(null);
   const [windowWidth, setWindowWidth] = useState(() => 
     typeof window !== "undefined" ? window.innerWidth : 380
@@ -55,7 +57,7 @@ export default function ContactForm() {
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsSending(true);
+    setStatus("loading");
     
     const form = event.currentTarget;
     const formData = new FormData(form);
@@ -68,15 +70,16 @@ export default function ContactForm() {
       });
 
       if (response.ok) {
+        setStatus("success");
         triggerToast("success");
         form.reset();
       } else {
+        setStatus("error");
         triggerToast("error");
       }
     } catch {
+      setStatus("error");
       triggerToast("error");
-    } finally {
-      setIsSending(false);
     }
   };
 
@@ -122,13 +125,14 @@ export default function ContactForm() {
           ></textarea>
         </div>
         <div className="flex items-center gap-5">
-          <button 
+          <AsyncButton 
             type="submit"
-            disabled={isSending}
-            className="bg-interaction text-background font-body font-semibold px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-[9px] hover:bg-interaction/90 transition-colors shadow-lg cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction focus-visible:ring-offset-2 outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+            status={status}
+            onReset={() => setStatus("idle")}
           >
-            {isSending ? "Sending..." : "Kirim Pesan"}
-          </button>
+            <Send className="size-4" />
+            Kirim Pesan
+          </AsyncButton>
         </div>
       </motion.form>
 
