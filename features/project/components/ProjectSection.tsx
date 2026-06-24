@@ -54,6 +54,7 @@ const ProjectSection = ({ className, navEntrance = false }: ProjectSectionProps)
       id: 2,
       title: "Media Pembelajaran Interaktif",
       desc: "Media pembelajaran berbasis web yang dirancang untuk mendukung proses belajar siswa sekolah dasar melalui pengalaman belajar yang interaktif, visual, dan mudah digunakan.",
+      url: "https://wheelduc.vercel.app/",
     },
   ];
 
