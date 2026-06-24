@@ -67,6 +67,9 @@ export const metadata: Metadata = {
     icon: "/logo.svg",
     apple: "/logo.svg",
   },
+  other: {
+    "fb:app_id": process.env.NEXT_PUBLIC_FB_APP_ID || "",
+  },
 };
 
 function MaintenanceScreen() {
