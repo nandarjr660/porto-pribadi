@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion, useAnimation, AnimatePresence, useScroll, useTransform, useMotionTemplate, useReducedMotion } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
+import { GraduationCap, Monitor, PenTool } from "lucide-react";
 
 interface AboutSectionProps {
   entranceTrigger?: number;
@@ -19,6 +20,42 @@ const blurOut = {
   opacity: 0,
   filter: "blur(4px)",
 };
+
+const skillsData = [
+  {
+    id: 0,
+    icon: GraduationCap,
+    title: "Kompetensi guru profesional",
+    bullets: [
+      "Merancang pembelajaran yang efektif dan adaptif",
+      "Mengelola kelas dengan pendekatan yang inklusif",
+      "Menerapkan strategi evaluasi berbasis kompetensi",
+    ],
+    progress: 90,
+  },
+  {
+    id: 1,
+    icon: Monitor,
+    title: "Pemanfaatan teknologi pendidikan",
+    bullets: [
+      "Mengembangkan kurikulum yang sesuai dengan kebutuhan siswa",
+      "Memanfaatkan teknologi dalam proses pembelajaran",
+      "Berkolaborasi dengan sesama pendidik",
+    ],
+    progress: 85,
+  },
+  {
+    id: 2,
+    icon: PenTool,
+    title: "Pengembangan media pembelajaran",
+    bullets: [
+      "Refleksi diri sebagai pendidik yang terus bertumbuh",
+      "Menerapkan penelitian tindakan kelas",
+      "Mengembangkan profesionalisme berkelanjutan",
+    ],
+    progress: 88,
+  },
+];
 
 const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Element => {
   const shouldReduceMotion = useReducedMotion();
@@ -64,7 +101,7 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
     },
   };
 
-  const roadmapRef = useRef(null);
+  const roadmapRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: roadmapRef,
@@ -73,7 +110,6 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
 
   const clipPercent = useTransform(scrollYProgress, [0.15, 0.85], [100, 0]);
   const clipPath = useMotionTemplate`inset(0% 0% ${shouldReduceMotion ? 0 : clipPercent}% 0%)`;
-
   const card1Controls = useAnimation();
   const card2Controls = useAnimation();
   const c1Item1 = useAnimation();
@@ -87,6 +123,9 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
   const c2Item4 = useAnimation();
 
   const [expandedSkill, setExpandedSkill] = useState<number | null>(null);
+const [hoveredSkill, setHoveredSkill] = useState<number | null>(null);
+const sentinelRef = useRef<HTMLDivElement>(null);
+const animCompleteRef = useRef(false);
 
   // Dynamic Roadmap Scale
   const [scale, setScale] = useState(1);
@@ -109,6 +148,34 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
     window.addEventListener("resize", updateScale);
     return () => window.removeEventListener("resize", updateScale);
   }, []);
+
+  // Roadmap scroll lock — prevent skipping past roadmap before animation completes
+  useEffect(() => {
+    if (!isDesktop || shouldReduceMotion) return;
+
+    const unsub = scrollYProgress.on("change", (latest) => {
+      if (latest > 0.78) animCompleteRef.current = true;
+    });
+
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return () => unsub();
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !animCompleteRef.current) {
+          roadmapRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(sentinel);
+
+    return () => {
+      unsub();
+      observer.disconnect();
+    };
+  }, [scrollYProgress, isDesktop, shouldReduceMotion]);
 
   useEffect(() => {
     let active = true;
@@ -478,10 +545,11 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
               </motion.div>
             </div>
           )}
+          {isDesktop && <div ref={sentinelRef} className="h-px" />}
         </div>
       </div>
 
-      {/* Skills Placeholder */}
+      {/* Skills */}
       <div id="skills" className="relative min-h-[600px] lg:min-h-[900px]">
         <div className="w-full px-6 sm:px-8 lg:px-[88px] max-w-[1440px] mx-auto pt-[60px] lg:pt-[100px]">
           <motion.p
@@ -494,164 +562,96 @@ const AboutSection = ({ navEntrance = false }: AboutSectionProps): React.JSX.Ele
             Apa yang saya kuasai?
           </motion.p>
 
-          {/* Skill Item 1 */}
-          <div>
-            <button
-              className="text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction rounded-lg transition-shadow"
-              onClick={() => setExpandedSkill(expandedSkill === 0 ? null : 0)}
-            >
-              <motion.p
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.3 }}
-            className="text-[18px] xs:text-[20px] sm:text-[28px] lg:text-[50px] font-bold text-text-primary font-heading uppercase mb-4 sm:mb-6 lg:mb-10 cursor-pointer"
-              >
-                Kompetensi guru profesional
-              </motion.p>
-            </button>
-            <AnimatePresence>
-              {expandedSkill === 0 && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
-                  className="overflow-hidden"
-                >
-                  <div className="pb-4 pt-2 flex flex-col gap-2.5">
-                    <p className="text-[13px] sm:text-[15px] lg:text-[18px] text-text-primary/80 font-body">Merancang pembelajaran yang efektif dan adaptif</p>
-                    <p className="text-[13px] sm:text-[15px] lg:text-[18px] text-text-primary/80 font-body">Mengelola kelas dengan pendekatan yang inklusif</p>
-                    <p className="text-[13px] sm:text-[15px] lg:text-[18px] text-text-primary/80 font-body">Menerapkan strategi evaluasi berbasis kompetensi</p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-              <div className="relative w-full mt-5 mb-[30px]">
-              <motion.div
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="w-full h-[5px] bg-text-primary origin-left"
-              ></motion.div>
-              <motion.span
-                initial={{ opacity: 0, scale: 0.5 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.4, delay: 0.6 }}
-                className="absolute right-0 top-[-44px] sm:top-[-54px] lg:top-[-60px] w-[28px] sm:w-[30px] h-[28px] sm:h-[30px] flex items-center justify-center text-text-primary font-black text-[32px] sm:text-[36px] lg:text-[40px] leading-none"
-              >
-                {expandedSkill === 0 ? "−" : "+"}
-              </motion.span>
-            </div>
-          </div>
+          {skillsData.map((skill) => {
+            const Icon = skill.icon;
+            const isExpanded = expandedSkill === skill.id;
+            const isHovered = hoveredSkill === skill.id;
 
-          {/* Skill Item 2 */}
-          <div>
-            <button
-              className="text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction rounded-lg transition-shadow"
-              onClick={() => setExpandedSkill(expandedSkill === 1 ? null : 1)}
-            >
-              <motion.p
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.3 }}
-            className="text-[18px] xs:text-[20px] sm:text-[28px] lg:text-[50px] font-bold text-text-primary font-heading uppercase mb-4 sm:mb-6 lg:mb-10 cursor-pointer"
-              >
-                Pemanfaatan teknologi pendidikan
-              </motion.p>
-            </button>
-            <AnimatePresence>
-              {expandedSkill === 1 && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
-                  className="overflow-hidden"
+            return (
+              <div key={skill.id}>
+                <button
+                  className="group text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction rounded-lg transition-shadow"
+                  onClick={() => setExpandedSkill(isExpanded ? null : skill.id)}
+                  onMouseEnter={() => setHoveredSkill(skill.id)}
+                  onMouseLeave={() => setHoveredSkill(null)}
                 >
-                  <div className="pb-4 pt-2 flex flex-col gap-2.5">
-                    <p className="text-[13px] sm:text-[15px] lg:text-[18px] text-text-primary/80 font-body">Mengembangkan kurikulum yang sesuai dengan kebutuhan siswa</p>
-                    <p className="text-[13px] sm:text-[15px] lg:text-[18px] text-text-primary/80 font-body">Memanfaatkan teknologi dalam proses pembelajaran</p>
-                    <p className="text-[13px] sm:text-[15px] lg:text-[18px] text-text-primary/80 font-body">Ber kolaborasi dengan sesama pendidik</p>
+                  <div className="flex items-center gap-3 sm:gap-4 lg:gap-5 mb-4 sm:mb-6 lg:mb-10">
+                    <motion.div
+                      variants={fadeUp}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.3 }}
+                      className="shrink-0"
+                    >
+                      <Icon
+                        size={28}
+                        className="text-text-primary/40 transition-all duration-300 group-hover:scale-110 group-hover:text-interaction"
+                        strokeWidth={1.5}
+                      />
+                    </motion.div>
+                    <motion.p
+                      variants={fadeUp}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.3 }}
+                      className="text-[18px] xs:text-[20px] sm:text-[28px] lg:text-[50px] font-bold text-text-primary font-heading uppercase transition-all duration-300 group-hover:-translate-y-0.5"
+                    >
+                      {skill.title}
+                    </motion.p>
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-              <div className="relative w-full mt-5 mb-[30px]">
-              <motion.div
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="w-full h-[5px] bg-text-primary origin-left"
-              ></motion.div>
-              <motion.span
-                initial={{ opacity: 0, scale: 0.5 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.4, delay: 0.6 }}
-                className="absolute right-0 top-[-44px] sm:top-[-54px] lg:top-[-60px] w-[28px] sm:w-[30px] h-[28px] sm:h-[30px] flex items-center justify-center text-text-primary font-black text-[32px] sm:text-[36px] lg:text-[40px] leading-none"
-              >
-                {expandedSkill === 1 ? "−" : "+"}
-              </motion.span>
-            </div>
-          </div>
-
-          {/* Skill Item 3 */}
-          <div>
-            <button
-              className="text-left w-full cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction rounded-lg transition-shadow"
-              onClick={() => setExpandedSkill(expandedSkill === 2 ? null : 2)}
-            >
-              <motion.p
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.3 }}
-            className="text-[18px] xs:text-[20px] sm:text-[28px] lg:text-[50px] font-bold text-text-primary font-heading uppercase mb-4 sm:mb-6 lg:mb-10 cursor-pointer"
-              >
-                Pengembangan media pembelajaran
-              </motion.p>
-            </button>
-            <AnimatePresence>
-              {expandedSkill === 2 && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
-                  className="overflow-hidden"
-                >
-                  <div className="pb-4 pt-2 flex flex-col gap-2.5">
-                    <p className="text-[13px] sm:text-[15px] lg:text-[18px] text-text-primary/80 font-body">Refleksi diri sebagai pendidik yang terus bertumbuh</p>
-                    <p className="text-[13px] sm:text-[15px] lg:text-[18px] text-text-primary/80 font-body">Menerapkan penelitian tindakan kelas</p>
-                    <p className="text-[13px] sm:text-[15px] lg:text-[18px] text-text-primary/80 font-body">Mengembangkan profesionalisme berkelanjutan</p>
+                </button>
+                <AnimatePresence>
+                  {isExpanded && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.4, ease: "easeInOut" }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pb-4 pt-2 flex flex-col gap-2.5">
+                        {skill.bullets.map((bullet, i) => (
+                          <motion.p
+                            key={bullet}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.3, delay: i * 0.1 }}
+                            className="text-[13px] sm:text-[15px] lg:text-[18px] text-text-primary/80 font-body pl-3 border-l-2 border-interaction/40"
+                          >
+                            {bullet}
+                          </motion.p>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <div className="relative w-full mt-5 mb-[30px]">
+                  <div className="w-full h-[5px] bg-text-primary/10 origin-left rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{ duration: 0.8, ease: "easeOut", delay: 0.3 }}
+                      className="h-full origin-left rounded-full transition-colors duration-300"
+                      style={{
+                        backgroundColor: isHovered ? "#FEAE96" : "#013237",
+                        width: `${skill.progress}%`,
+                      }}
+                    />
                   </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-            <div className="relative w-full mt-5">
-              <motion.div
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
-                className="w-full h-[5px] bg-text-primary origin-left"
-              ></motion.div>
-              <motion.span
-                initial={{ opacity: 0, scale: 0.5 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.4, delay: 0.6 }}
-                className="absolute right-0 top-[-44px] sm:top-[-54px] lg:top-[-60px] w-[28px] sm:w-[30px] h-[28px] sm:h-[30px] flex items-center justify-center text-text-primary font-black text-[32px] sm:text-[36px] lg:text-[40px] leading-none"
-              >
-                {expandedSkill === 2 ? "−" : "+"}
-              </motion.span>
-            </div>
-          </div>
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.4, delay: 0.6 }}
+                    className="absolute right-0 top-[-44px] sm:top-[-54px] lg:top-[-60px] w-[28px] sm:w-[30px] h-[28px] sm:h-[30px] flex items-center justify-center text-text-primary font-black text-[32px] sm:text-[36px] lg:text-[40px] leading-none"
+                  >
+                    {isExpanded ? "−" : "+"}
+                  </motion.span>
+                </div>
+              </div>
+            );
+          })}
 
         </div>
         <p className="absolute bottom-6 sm:bottom-10 left-0 right-0 text-center text-sm sm:text-[16px] lg:text-[18px] font-light text-text-primary/60 font-body">

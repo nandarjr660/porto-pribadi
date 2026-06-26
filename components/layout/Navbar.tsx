@@ -282,21 +282,21 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
       {/* Overlay Content */}
       <div
         className={cn(
-          "overlay-content absolute inset-0 h-full flex items-center px-[88px] max-lg:px-8 max-md:px-6 max-w-[1440px] mx-auto",
+          "overlay-content absolute inset-0 h-full flex items-start pt-[clamp(80px,12vh,140px)] sm:pt-[clamp(100px,12vh,140px)] lg:pt-[clamp(120px,12vh,140px)] overflow-y-auto pb-10 px-[88px] max-lg:px-8 max-md:px-6 max-w-[1440px] mx-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] scrollbar-none",
           !isOpen && "pointer-events-none"
         )}
         style={{ opacity: 0 }}
         onClick={handleOverlayClick}
       >
         {/* Menu */}
-        <nav className="flex flex-col gap-8">
+        <nav className="flex flex-col gap-[clamp(12px,3vh,32px)]">
           {["Home", "About", "Project", "Contact"].map((item) => {
             const dir = hoverDirections[item] || "left";
             return (
               <a
                 key={item}
                 href={item.toLowerCase()}
-                className="menu-item group relative text-text-primary font-heading font-bold text-[58px] sm:text-[68px] md:text-[72px] lg:text-[96px] leading-none transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction focus-visible:ring-offset-4 rounded-lg"
+                className="menu-item group relative text-text-primary font-heading font-bold text-[clamp(36px,8vh,96px)] leading-none transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction focus-visible:ring-offset-4 rounded-lg"
                 onClick={(e) => handleMenuClick(e, item)}
                 onMouseMove={(e) => handleMenuMouseMove(e, item)}
               >
@@ -313,7 +313,7 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
               </a>
             );
           })}
-          <div className="mt-6 lg:mt-12 flex flex-col gap-1">
+          <div className="mt-[clamp(16px,4vh,48px)] flex flex-col gap-1">
             <span className="text-text-primary/60 font-body font-extralight text-[14px] sm:text-[15px] lg:text-[18px]">
               PPG Prajabatan
             </span>
@@ -325,11 +325,11 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
             </span>
           </div>
         </nav>
-
+        
         {/* Portrait - hidden on mobile/tablet, visible on desktop */}
         <div
           className={cn(
-            "portrait hidden lg:block absolute right-[338px] top-1/2 -translate-y-1/2 mt-[-230px] cursor-pointer transition-transform duration-300",
+            "portrait hidden lg:block absolute right-[338px] top-[clamp(120px,12vh,140px)] cursor-pointer transition-transform duration-300",
             isPortraitClicked && "scale-[1.05]"
           )}
           style={{ opacity: 0 }}
@@ -346,7 +346,7 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
         </div>
 
         {/* Social Names */}
-        <div className="social-names absolute right-6 sm:right-8 lg:right-[88px] bottom-8 sm:bottom-12 lg:bottom-[100px] flex flex-col gap-1 text-left" style={{ opacity: 0 }}>
+        <div className="social-names absolute right-6 sm:right-8 lg:right-[88px] bottom-[clamp(24px,8vh,100px)] flex flex-col gap-1 text-left" style={{ opacity: 0 }}>
           {[
             { name: "Facebook", href: "https://facebook.com/Hasmunandar" },
             { name: "Instagram", href: "https://instagram.com/hsmnandar" },

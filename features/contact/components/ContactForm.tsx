@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Send } from "lucide-react";
+import { Send, AlertCircle } from "lucide-react";
 import { AsyncButton } from "@/components/shadcnblocks/async-button";
+
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@(gmail\.com|outlook\.com|hotmail\.com|yahoo\.com|icloud\.com|live\.com|protonmail\.com|proton\.me|mail\.com|aol\.com|zoho\.com|yandex\.com|gmx\.com|protonmail\.ch)$/i;
 
 interface ToastState {
   show: boolean;
@@ -13,7 +15,8 @@ interface ToastState {
 export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [toast, setToast] = useState<ToastState | null>(null);
-  const [windowWidth, setWindowWidth] = useState(() => 
+  const [emailError, setEmailError] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(() =>
     typeof window !== "undefined" ? window.innerWidth : 380
   );
 
@@ -44,6 +47,12 @@ export default function ContactForm() {
     setToast(null);
   };
 
+  const validateEmail = (value: string) => {
+    const valid = EMAIL_REGEX.test(value);
+    setEmailError(!valid);
+    return valid;
+  };
+
   const triggerToast = (type: "success" | "error") => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -57,9 +66,15 @@ export default function ContactForm() {
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setStatus("loading");
-    
+
     const form = event.currentTarget;
+    const emailInput = form.elements.namedItem("email") as HTMLInputElement;
+    if (!validateEmail(emailInput.value)) {
+      return;
+    }
+
+    setStatus("loading");
+
     const formData = new FormData(form);
     formData.append("access_key", "dcf59fb6-b2ff-48db-82f4-63ae4a7e2431");
 
@@ -103,14 +118,26 @@ export default function ContactForm() {
           </div>
           <div className="flex flex-col gap-1.5 w-full">
             <label htmlFor="contact-email" className="text-xs sm:text-sm font-semibold text-text-primary/70 font-body">Email Anda</label>
-            <input 
+            <input
               id="contact-email"
-              type="email" 
-              name="email" 
+              type="email"
+              name="email"
               placeholder="Email Anda"
               required
-              className="bg-interaction/10 border border-interaction/30 rounded-[9px] px-4 sm:px-5 py-3 text-sm sm:text-base text-text-primary placeholder:text-text-primary/50 font-body focus:outline-none focus:border-interaction focus:ring-1 focus:ring-interaction transition-colors"
+              onBlur={(e) => validateEmail(e.target.value)}
+              onChange={() => setEmailError(false)}
+              className={`bg-interaction/10 border rounded-[9px] px-4 sm:px-5 py-3 text-sm sm:text-base text-text-primary placeholder:text-text-primary/50 font-body focus:outline-none focus:ring-1 transition-colors ${
+                emailError
+                  ? "border-rose-400 focus:border-rose-500 focus:ring-rose-500/30"
+                  : "border-interaction/30 focus:border-interaction focus:ring-interaction"
+              }`}
             />
+            {emailError && (
+              <p className="flex items-center gap-1.5 text-xs text-rose-500 font-body mt-0.5">
+                <AlertCircle className="size-3.5 shrink-0" />
+                Format email yang anda masukkan salah
+              </p>
+            )}
           </div>
         </div>
         <div className="flex flex-col gap-1.5 w-full">

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Inter } from "next/font/google";
 import Image from "next/image";
 import Navbar from "@/components/layout/Navbar";
-import { Preloader } from "@/components/ui";
+import { Preloader, ScrollProgress } from "@/components/ui";
 import DisableContextMenu from "@/components/ui/DisableContextMenu";
 import "./globals.css";
 
@@ -147,6 +147,7 @@ export default function RootLayout({
           <>
             <DisableContextMenu />
             <Preloader />
+            <ScrollProgress />
             <Navbar />
             {children}
           </>
