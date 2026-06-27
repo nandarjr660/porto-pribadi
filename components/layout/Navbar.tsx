@@ -29,11 +29,15 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
     const menuItems = nav.querySelectorAll(".menu-item");
     const portrait = nav.querySelector(".portrait") as HTMLElement;
     const socialNames = nav.querySelector(".social-names") as HTMLElement;
+    const hamburgerSpans = nav.querySelectorAll(".hamburger-container span");
 
     gsap.set(overlayContent, { opacity: 0 });
     gsap.set(menuItems, { opacity: 0, x: -80 });
     gsap.set(portrait, { opacity: 0, x: 80 });
     gsap.set(socialNames, { opacity: 0, x: 80 });
+
+    const isSmallScreen = window.innerWidth < 640;
+    const yVal = isSmallScreen ? 8 : 10;
 
     const tl = gsap.timeline({ paused: true });
 
@@ -42,6 +46,9 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
       duration: 0.8,
       ease: "power2.out",
     })
+      .to(hamburgerSpans[0], { rotation: 45, y: yVal, duration: 0.55, ease: "elastic.out(1.2, 0.4)" }, "-=0.5")
+      .to(hamburgerSpans[1], { opacity: 0, duration: 0.3, ease: "power2.inOut" }, "-=0.4")
+      .to(hamburgerSpans[2], { rotation: -45, y: -yVal, duration: 0.55, ease: "elastic.out(1.2, 0.4)" }, "-=0.3")
       .to(overlayContent, { opacity: 1, duration: 0.3 }, "-=0.3")
       .to(
         menuItems,
@@ -142,11 +149,8 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
         return;
       }
 
-      if (currentPath === target) {
-        window.dispatchEvent(new PopStateEvent("popstate"));
-      } else {
+      if (currentPath !== target) {
         history.pushState(null, "", `/${target}`);
-        window.dispatchEvent(new PopStateEvent("popstate"));
       }
     },
     []
@@ -210,11 +214,14 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
       return;
     }
 
-    if (currentPath === target) {
-      window.dispatchEvent(new PopStateEvent("popstate"));
-    } else {
+    if (currentPath !== target) {
       history.pushState(null, "", `/${target}`);
-      window.dispatchEvent(new PopStateEvent("popstate"));
+    }
+
+    if (currentPath !== target && !isOpen) {
+      window.dispatchEvent(
+        new CustomEvent("section-entrance", { detail: target })
+      );
     }
   }, [isOpen]);
 
@@ -258,24 +265,9 @@ const Navbar = ({ className }: NavbarProps): React.JSX.Element => {
           className="hamburger-container flex flex-col justify-center items-center size-[36px] sm:size-[44px] gap-[5px] sm:gap-[6px] cursor-pointer z-50 relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-interaction focus-visible:ring-offset-2 rounded-md"
           aria-label="Toggle menu"
         >
-          <span
-            className={cn(
-              "w-[22px] h-[3px] sm:w-[28px] sm:h-[4px] bg-text-primary transition-all duration-300",
-              isOpen && "rotate-45 translate-y-[8px] sm:translate-y-[10px]"
-            )}
-          />
-          <span
-            className={cn(
-              "w-[22px] h-[3px] sm:w-[28px] sm:h-[4px] bg-text-primary transition-all duration-300",
-              isOpen && "opacity-0"
-            )}
-          />
-          <span
-            className={cn(
-              "w-[22px] h-[3px] sm:w-[28px] sm:h-[4px] bg-text-primary transition-all duration-300",
-              isOpen && "-rotate-45 translate-y-[-8px] sm:translate-y-[-10px]"
-            )}
-          />
+          <span className="w-[22px] h-[3px] sm:w-[28px] sm:h-[4px] bg-text-primary" />
+          <span className="w-[22px] h-[3px] sm:w-[28px] sm:h-[4px] bg-text-primary" />
+          <span className="w-[22px] h-[3px] sm:w-[28px] sm:h-[4px] bg-text-primary" />
         </button>
       </div>
 

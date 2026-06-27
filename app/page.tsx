@@ -126,18 +126,27 @@ const Home = (): React.JSX.Element => {
 
     const onPopState = () => {
       const section = sanitizePath(window.location.pathname);
-      setActive(section);
       window.scrollTo(0, 0);
-      if (!navPendingRef.current) {
+      if (navPendingRef.current) {
+        navPendingRef.current = false;
+      } else {
+        setActive(section);
         setNavEntrance(false);
         setEntranceTrigger((prev) => prev + 1);
-      } else {
-        setNavEntrance(true);
       }
-      navPendingRef.current = false;
+    };
+
+    const onSectionEntrance = (e: Event) => {
+      const section = (e as CustomEvent).detail as string;
+      if (validSections.includes(section)) {
+        setActive(section);
+        setNavEntrance(true);
+        setEntranceTrigger((prev) => prev + 1);
+      }
     };
 
     window.addEventListener("popstate", onPopState);
+    window.addEventListener("section-entrance", onSectionEntrance);
 
     if (initRef.current) {
       initRef.current = false;
@@ -153,6 +162,7 @@ const Home = (): React.JSX.Element => {
 
     return () => {
       window.removeEventListener("popstate", onPopState);
+      window.removeEventListener("section-entrance", onSectionEntrance);
       window.removeEventListener("trigger-home-load", handleLoadTrigger);
       window.removeEventListener("trigger-home-animation", handleAnimateTrigger);
       window.removeEventListener("navbar-navigate-start", handleNavStart);
