@@ -9,6 +9,14 @@ export const metadata: Metadata = {
   },
   openGraph: {
     url: "/projects",
+    images: [
+      {
+        url: "/og/projects.png",
+        width: 1200,
+        height: 630,
+        alt: "Projek Hasmunandar",
+      },
+    ],
   },
 };
 

@@ -9,6 +9,14 @@ export const metadata: Metadata = {
   },
   openGraph: {
     url: "/about",
+    images: [
+      {
+        url: "/og/about.png",
+        width: 1200,
+        height: 630,
+        alt: "Tentang Hasmunandar",
+      },
+    ],
   },
 };
 

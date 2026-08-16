@@ -127,6 +127,36 @@ export default function RootLayout({
             }),
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "Hasmunandar Portofolio",
+              url: "https://hsmnandar.vercel.app",
+              inLanguage: "id-ID",
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "Hasmunandar",
+              url: "https://hsmnandar.vercel.app",
+              logo: "https://hsmnandar.vercel.app/logo.svg",
+              sameAs: [
+                "https://facebook.com/Hasmunandar",
+                "https://instagram.com/hsmnandar",
+                "https://linkedin.com/in/Hasmunandar",
+                "https://github.com/nandarjr660",
+              ],
+            }),
+          }}
+        />
         <SmoothScroll>
           <Preloader />
           <ScrollProgress />

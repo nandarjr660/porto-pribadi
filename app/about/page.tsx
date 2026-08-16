@@ -240,6 +240,49 @@ const About = () => {
         </div>
       </div>
     </section>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: [
+            {
+              "@type": "Question",
+              name: "Siapa Hasmunandar?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Hasmunandar adalah mahasiswa PPG Prajabatan dan PGSD yang berfokus pada inovasi pembelajaran, teknologi pendidikan, dan pengembangan media pembelajaran interaktif untuk Sekolah Dasar.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Apa fokus utama Hasmunandar?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Fokus utamanya adalah mengembangkan media pembelajaran interaktif dan memanfaatkan teknologi pendidikan untuk mendukung pembelajaran di Sekolah Dasar, termasuk penerapan Kurikulum Merdeka.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Di mana Hasmunandar menempuh pendidikan?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Hasmunandar menempuh pendidikan di Universitas Negeri Makassar dan Universitas Muhammadiyah Indonesia dengan latar belakang Pendidikan Guru Sekolah Dasar.",
+              },
+            },
+            {
+              "@type": "Question",
+              name: "Bagaimana cara menghubungi Hasmunandar?",
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: "Hasmunandar dapat dihubungi melalui halaman kontak di situs ini, atau melalui media sosial Facebook, Instagram, LinkedIn, dan GitHub yang tertera di halaman kontak.",
+              },
+            },
+          ],
+        }),
+      }}
+    />
     </ViewTransition>
   );
 };
