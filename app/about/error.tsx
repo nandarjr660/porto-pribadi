@@ -1,6 +1,6 @@
 "use client";
 
-export default function Error({
+export default function AboutError({
   reset,
 }: {
   error: Error & { digest?: string };
@@ -8,14 +8,14 @@ export default function Error({
 }) {
   return (
     <div className="min-h-dvh bg-paper flex flex-col items-center justify-center px-6">
-      <span className="text-[200px] max-md:text-[120px] font-display font-bold text-accent/20 leading-none select-none">
+      <span className="text-[120px] font-display font-bold text-accent/20 leading-none select-none">
         !
       </span>
-      <h1 className="text-[32px] max-md:text-[24px] font-display font-bold text-ink mt-[-20px]">
-        Terjadi kesalahan
+      <h1 className="text-[24px] font-display font-bold text-ink mt-[-10px]">
+        Gagal memuat Tentang
       </h1>
-      <p className="text-[18px] max-md:text-[16px] text-muted font-body mt-3 text-center max-w-[400px]">
-        Maaf, terjadi sesuatu yang tidak terduga. Silakan coba lagi.
+      <p className="text-[16px] text-muted font-body mt-3 text-center max-w-[400px]">
+        Terjadi kesalahan saat memuat halaman ini. Silakan coba lagi.
       </p>
       <button
         onClick={reset}

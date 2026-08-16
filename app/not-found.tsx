@@ -2,19 +2,19 @@ import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="min-h-dvh bg-background flex flex-col items-center justify-center px-6 pt-[56px] sm:pt-[70px]">
-      <span className="text-[100px] xs:text-[130px] sm:text-[180px] lg:text-[200px] font-heading font-bold text-interaction/30 leading-none select-none">
+    <div className="min-h-dvh bg-paper flex flex-col items-center justify-center px-6">
+      <span className="text-[200px] max-md:text-[120px] font-display font-bold text-accent/20 leading-none select-none">
         404
       </span>
-      <h1 className="text-[20px] xs:text-[24px] sm:text-[28px] lg:text-[32px] font-heading font-bold text-text-primary mt-[-10px] sm:mt-[-20px] text-balance">
+      <h1 className="text-[32px] max-md:text-[24px] font-display font-bold text-ink mt-[-20px]">
         Halaman tidak ditemukan
       </h1>
-      <p className="text-[13px] xs:text-[15px] sm:text-[17px] lg:text-[18px] text-text-primary/60 font-body mt-2 sm:mt-3 text-center max-w-[400px] px-4 text-pretty">
+      <p className="text-[18px] max-md:text-[16px] text-muted font-body mt-3 text-center max-w-[400px]">
         Halaman yang kamu cari mungkin sudah dipindah, dihapus, atau tidak pernah ada.
       </p>
       <Link
         href="/"
-        className="mt-6 sm:mt-8 px-6 py-2.5 sm:px-8 sm:py-3 bg-interaction text-text-primary font-heading font-bold text-[14px] sm:text-[16px] lg:text-[18px] rounded-lg hover:opacity-80 transition-opacity cursor-pointer"
+        className="mt-8 px-8 py-3 bg-ink text-paper font-display font-bold text-[16px] brutalist-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150 cursor-pointer"
       >
         Kembali ke Beranda
       </Link>

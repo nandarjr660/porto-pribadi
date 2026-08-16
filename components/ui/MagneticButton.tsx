@@ -51,16 +51,16 @@ export default function MagneticButton({
   const componentProps = href ? { href } : { onClick };
 
   const baseStyles =
-    "inline-flex items-center justify-center min-w-[110px] sm:min-w-[144px] h-[38px] sm:h-[44px] px-4 sm:px-6 rounded-[9px] font-body text-[13px] sm:text-[16px] font-semibold transition-shadow duration-300 whitespace-nowrap cursor-pointer";
+    "inline-flex items-center justify-center min-w-[110px] sm:min-w-[144px] h-[38px] sm:h-[44px] px-4 sm:px-6 rounded-full font-body text-[13px] sm:text-[15px] font-medium transition-shadow duration-300 whitespace-nowrap cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2";
 
   const shadowStyle = {
-    boxShadow: "0px 34px 9px rgba(254,174,150,0.06), 0px 22px 9px rgba(254,174,150,0.06), 0px 12px 7px rgba(254,174,150,0.06), 0px 5px 5px rgba(254,174,150,0.06), 0px 1px 3px rgba(254,174,150,0.06)",
+    boxShadow: "0px 2px 8px rgba(45,42,38,0.06)",
   };
 
   const variantStyles =
     variant === "filled"
-      ? "bg-interaction text-background"
-      : "bg-transparent text-interaction border-2 border-interaction hover:bg-interaction/10";
+      ? "bg-ink text-paper hover:bg-ink/90"
+      : "bg-transparent text-ink border border-border hover:bg-surface";
 
   return (
     <Component

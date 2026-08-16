@@ -1,141 +1,195 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+
+/* Hallmark · component: preloader · genre: playful · theme: project system (brutalist playful tokens)
+ * states: n/a (non-interactive) · contrast: pass · reduced-motion: handled */
+
+const GREETING = "Hi, Selamat datang :)";
+const GREETING_CHARS = GREETING.split("");
+const MARQUEE = "GURU · PENDIDIKAN · TEKNOLOGI · PEMBELAJARAN · INOVASI · KREATIF · ";
+
+const getStatus = (p: number) => {
+  if (p < 30) return "Menyiapkan halaman";
+  if (p < 60) return "Memuat karya";
+  if (p < 90) return "Tunggu yaa, dikit lagi :*";
+  return "Welcome and Enjoy";
+};
 
 const Preloader = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const topRef = useRef<HTMLDivElement>(null);
-  const bottomRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
+  const prefersReduced = useReducedMotion();
+  const [show, setShow] = useState(true);
   const [progress, setProgress] = useState(0);
-
-  const getPreloaderText = (progress: number) => {
-    if (progress < 30) return "Please Wait";
-    if (progress < 60) return "Progress berjalan";
-    if (progress < 90) return "Tunggu yaa, dikit lagi :*";
-    return "Welcome and Enjoy";
-  };
+  const status = getStatus(progress);
 
   useEffect(() => {
-    // Check if we have already shown the preloader in this session
     if (sessionStorage.getItem("preloader_shown")) {
-      if (containerRef.current) {
-        containerRef.current.style.display = "none";
-      }
-      // Trigger load and animation immediately if skipped
-      window.dispatchEvent(new CustomEvent("trigger-home-load"));
-      window.dispatchEvent(new CustomEvent("trigger-home-animation"));
-      return;
+      const id = requestAnimationFrame(() => setShow(false));
+      return () => cancelAnimationFrame(id);
     }
 
-    const ctx = gsap.context(() => {
-      const tl = gsap.timeline({
-        onComplete: () => {
+    document.body.style.overflow = "hidden";
+    let raf = 0;
+    const start = performance.now();
+    const duration = prefersReduced ? 600 : 3500;
+
+    const tick = (now: number) => {
+      const p = Math.min(100, ((now - start) / duration) * 100);
+      setProgress(Math.round(p));
+
+      if (p < 100) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        window.setTimeout(() => {
           sessionStorage.setItem("preloader_shown", "true");
-        }
-      });
+          window.setTimeout(() => {
+            setShow(false);
+            document.body.style.overflow = "";
+          }, prefersReduced ? 100 : 850);
+        }, prefersReduced ? 0 : 400);
+      }
+    };
 
-      // Disable scrolling during preloader
-      document.body.style.overflow = "hidden";
-
-      // Progress animation — ends at 4.8s (100%)
-      tl.to({ val: 0 }, {
-        val: 100,
-        duration: 4.8,
-        ease: "power2.inOut",
-        onUpdate: function () {
-          setProgress(Math.round(this.targets()[0].val));
-        },
-      });
-
-      // Trigger content load in background at 3.6s
-      tl.call(() => {
-        window.dispatchEvent(new CustomEvent("trigger-home-load"));
-      }, undefined, 3.6);
-
-      // Split: fade content + top/bottom slide — starts right after progress
-      tl.to(contentRef.current, {
-        opacity: 0,
-        duration: 0.3,
-        ease: "power2.inOut",
-      });
-      tl.to(topRef.current, {
-        y: "-100%",
-        duration: 1.2,
-        ease: "power3.inOut",
-      }, "<"); // "<" means same start as previous tween
-      tl.to(bottomRef.current, {
-        y: "100%",
-        duration: 1.2,
-        ease: "power3.inOut",
-      }, "<"); // "<" means same start as previous tween
-
-      // Trigger animation + hide preloader + re-enable scroll — after split
-      tl.call(() => {
-        window.dispatchEvent(new CustomEvent("trigger-home-animation"));
-        if (containerRef.current) containerRef.current.style.display = "none";
-        document.body.style.overflow = "";
-      });
-    }, containerRef);
+    raf = requestAnimationFrame(tick);
 
     return () => {
-      ctx.revert();
+      cancelAnimationFrame(raf);
       document.body.style.overflow = "";
     };
-  }, []);
+  }, [prefersReduced]);
 
   return (
-    <div
-      ref={containerRef}
-      id="global-preloader"
-      className="fixed inset-0 z-9999 pointer-events-none"
-    >
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            if (typeof window !== 'undefined' && window.sessionStorage && window.sessionStorage.getItem('preloader_shown')) {
-              var preloader = document.getElementById('global-preloader');
-              if (preloader) {
-                preloader.style.display = 'none';
-              }
-            }
-          `,
-        }}
-      />
-      {/* Background Halves with Text */}
-      <div
-        ref={topRef}
-        className="absolute left-0 top-0 w-full h-1/2 bg-[#F7DDC8] flex flex-col justify-end items-center pb-4 z-10"
-      >
-        <span className="font-heading text-[20px] font-bold text-text-primary text-center">
-          {getPreloaderText(progress)}
-        </span>
-      </div>
-      <div
-        ref={bottomRef}
-        className="absolute left-0 bottom-0 w-full h-1/2 bg-[#F7DDC8] flex flex-col justify-start items-center pt-4 z-10"
-      >
-        <span className="font-heading text-[20px] font-bold text-text-primary">{progress}%</span>
-      </div>
+    <AnimatePresence>
+      {show && (
+        <motion.div
+          className="fixed inset-0 z-[var(--z-skip)] pointer-events-none"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={progress}
+          aria-label="Memuat portofolio"
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3, delay: prefersReduced ? 0 : 0.65 }}
+        >
+          {/* Top half */}
+          <motion.div
+            className="relative h-1/2 bg-ink noise-bg overflow-hidden"
+            exit={prefersReduced ? { opacity: 0 } : { y: "-100%" }}
+            transition={prefersReduced ? { duration: 0.2 } : { duration: 0.75, delay: 0.05, ease: [0.4, 0, 0.2, 1] }}
+          >
+            <div aria-hidden className="absolute top-5 left-6 sm:top-7 sm:left-10 font-mono text-[13px] text-paper/40">
+              HSMN.
+            </div>
+            <div aria-hidden className="absolute top-5 right-6 sm:top-7 sm:right-10 font-mono text-[13px] text-paper/40">
+              2025
+            </div>
 
-      {/* Content (Just the line) */}
-      <div
-        ref={contentRef}
-        className="absolute inset-0 z-20 flex flex-col items-center justify-center w-full"
-      >
-        {/* Solid line expanding from center */}
-        <div className="w-full h-[3px] relative opacity-60 flex justify-center">
-          <div
-            className="h-full bg-text-primary"
-            style={{
-              width: `${progress}%`,
-              transition: "width 0.1s linear"
-            }}
-          />
-        </div>
-      </div>
-    </div>
+            <motion.span
+              aria-hidden
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 260, damping: 20, delay: prefersReduced ? 0 : 0.2 }}
+              className="absolute top-5 left-6 sm:top-7 sm:left-10 w-5 h-5 border-t-[3px] border-l-[3px] border-accent"
+            />
+            <motion.span
+              aria-hidden
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 260, damping: 20, delay: prefersReduced ? 0 : 0.25 }}
+              className="absolute top-5 right-6 sm:top-7 sm:right-10 w-5 h-5 border-t-[3px] border-r-[3px] border-accent"
+            />
+
+            <div className="h-full flex flex-col items-center justify-center gap-4">
+              <h2 className="font-display font-bold text-[22px] sm:text-[28px] lg:text-[32px] text-paper tracking-tight">
+                {GREETING_CHARS.map((char, i) => (
+                  <motion.span
+                    key={i}
+                    aria-hidden
+                    initial={{ opacity: 0, y: prefersReduced ? 0 : 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      delay: prefersReduced ? 0 : 0.2 + i * 0.025,
+                      duration: 0.4,
+                      ease: [0.25, 0.1, 0.25, 1],
+                    }}
+                    className="inline-block"
+                  >
+                    {char === " " ? "\u00A0" : char}
+                  </motion.span>
+                ))}
+              </h2>
+
+              <div className="h-5 overflow-hidden" aria-live="polite">
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={status}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+                    className="font-mono text-[11px] uppercase tracking-[0.2em] text-paper/50"
+                  >
+                    {status}
+                  </motion.p>
+                </AnimatePresence>
+              </div>
+
+              <div className="w-full max-w-[300px] sm:max-w-[420px] h-[4px] bg-paper/10 overflow-hidden">
+                <div
+                  className="h-full bg-accent origin-left"
+                  style={{
+                    transform: `scaleX(${progress / 100})`,
+                    transition: prefersReduced ? "transform 0.2s linear" : "transform 0.12s steps(10, end)",
+                  }}
+                />
+              </div>
+            </div>
+
+            <div aria-hidden className="absolute bottom-0 left-0 right-0 h-9 border-t border-paper/10 flex items-center overflow-hidden">
+              <div className="animate-marquee whitespace-nowrap flex">
+                {[0, 1].map((i) => (
+                  <span key={i} className="font-mono text-[11px] uppercase tracking-[0.2em] text-paper/15 pr-8">
+                    {MARQUEE}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Bottom half */}
+          <motion.div
+            className="relative h-1/2 bg-ink noise-bg overflow-hidden"
+            exit={prefersReduced ? { opacity: 0 } : { y: "100%" }}
+            transition={prefersReduced ? { duration: 0.2 } : { duration: 0.75, delay: 0.1, ease: [0.4, 0, 0.2, 1] }}
+          >
+            <motion.span
+              aria-hidden
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 260, damping: 20, delay: prefersReduced ? 0 : 0.3 }}
+              className="absolute bottom-5 left-6 sm:bottom-7 sm:left-10 w-5 h-5 border-b-[3px] border-l-[3px] border-accent"
+            />
+            <motion.span
+              aria-hidden
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 260, damping: 20, delay: prefersReduced ? 0 : 0.35 }}
+              className="absolute bottom-5 right-6 sm:bottom-7 sm:right-10 w-5 h-5 border-b-[3px] border-r-[3px] border-accent"
+            />
+
+            <motion.div
+              initial={prefersReduced ? { opacity: 0 } : { opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1], delay: prefersReduced ? 0 : 0.3 }}
+              className="absolute bottom-6 left-6 sm:bottom-8 sm:left-10 font-display font-bold text-[88px] sm:text-[120px] leading-none text-paper/15 tabular-nums"
+            >
+              {progress}%
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

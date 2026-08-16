@@ -1,40 +1,36 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, useSpring } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform, useMotionValueEvent } from "framer-motion";
+import { useState } from "react";
 
 export default function ScrollProgress() {
-  const [progress, setProgress] = useState(0);
-  const springProgress = useSpring(progress, {
-    stiffness: 100,
-    damping: 30,
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 20,
     restDelta: 0.001,
   });
 
-  useEffect(() => {
-    const update = () => {
-      const about = document.getElementById("about");
-      if (!about) {
-        setProgress(0);
-        return;
-      }
-      const rect = about.getBoundingClientRect();
-      const viewH = window.innerHeight;
-      const sectionH = rect.height;
-      const total = sectionH + viewH;
-      const scrolled = viewH - rect.top;
-      setProgress(Math.min(1, Math.max(0, scrolled / total)));
-    };
+  const badgeX = useTransform(progress, (v) => `${v * 96}vw`);
 
-    window.addEventListener("scroll", update, { passive: true });
-    update();
-    return () => window.removeEventListener("scroll", update);
-  }, []);
+  const [percent, setPercent] = useState(0);
+
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    setPercent(Math.round(v * 100));
+  });
 
   return (
-    <motion.div
-      className="fixed top-0 left-0 right-0 h-[2px] bg-accent/40 origin-left z-[9999]"
-      style={{ scaleX: springProgress }}
-    />
+    <div className="fixed top-0 left-0 right-0 z-[9999] pointer-events-none">
+      <motion.div
+        className="h-[2px] bg-accent origin-left"
+        style={{ scaleX: progress }}
+      />
+      <motion.div
+        className="absolute left-0 top-[3px] -translate-x-1/2 bg-ink text-paper font-mono text-[9px] font-bold px-1.5 py-px rounded-full shadow-md whitespace-nowrap leading-tight"
+        style={{ x: badgeX }}
+      >
+        {percent}%
+      </motion.div>
+    </div>
   );
 }

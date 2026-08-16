@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   productionBrowserSourceMaps: false,
   reactStrictMode: true,
+  experimental: {
+    viewTransition: true,
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: '**.vercel.app' },
@@ -12,14 +15,6 @@ const nextConfig: NextConfig = {
     deviceSizes: [411, 640, 768, 1024, 1280, 1440],
     imageSizes: [240, 384],
     minimumCacheTTL: 31536000,
-  },
-  async rewrites() {
-    return [
-      { source: "/about", destination: "/" },
-      { source: "/project", destination: "/" },
-      { source: "/contact", destination: "/" },
-      { source: "/home", destination: "/" },
-    ];
   },
   async headers() {
     return [

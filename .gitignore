@@ -50,3 +50,6 @@ AUDIT_REPORT.md
 AGENTS.md
 README.md
 scripts/
+
+# local logs
+dev-server.log

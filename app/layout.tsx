@@ -1,33 +1,41 @@
-import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
-import Image from "next/image";
+import type { Metadata, Viewport } from "next";
+import { Space_Grotesk, DM_Sans, JetBrains_Mono } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
-import { Preloader, ScrollProgress } from "@/components/ui";
-import DisableContextMenu from "@/components/ui/DisableContextMenu";
+import Footer from "@/components/layout/Footer";
+import SmoothScroll from "@/components/ui/SmoothScroll";
+import ScrollProgress from "@/components/ui/ScrollProgress";
+import Preloader from "@/components/ui/Preloader";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-heading",
+  variable: "--font-display",
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
 });
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-body",
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
-  title: "Portofolio Hasmunandar | Calon Guru Profesional & Pendidik Sekolah Dasar",
+  title: "Hasmunandar | Portofolio",
   description:
-    "Portofolio digital dan perjalanan belajar Hasmunandar, mahasiswa PPG Prajabatan & PGSD, berfokus pada inovasi pembelajaran dan teknologi pendidikan.",
+    "Portofolio Hasmunandar, mahasiswa PPG Prajabatan & PGSD. Fokus pada inovasi pembelajaran dan teknologi pendidikan.",
   keywords: [
     "Hasmunandar",
-    "Kasimburang",
     "Portofolio PPG",
     "PPG Prajabatan",
-    "Pendidikan Guru Sekolah Dasar",
     "PGSD",
     "Guru Profesional",
     "Teknologi Pendidikan",
@@ -40,17 +48,17 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "Portofolio Hasmunandar | Calon Guru Profesional & Pendidik Sekolah Dasar",
+    title: "Hasmunandar | Portofolio",
     description:
-      "Portofolio digital dan perjalanan belajar Hasmunandar, mahasiswa PPG Prajabatan & PGSD, berfokus pada inovasi pembelajaran dan teknologi pendidikan.",
+      "Portofolio Hasmunandar, mahasiswa PPG Prajabatan & PGSD. Fokus pada inovasi pembelajaran dan teknologi pendidikan.",
     url: "https://hsmnandar.vercel.app",
-    siteName: "Portofolio Hasmunandar",
+    siteName: "Hasmunandar Portofolio",
     images: [
       {
         url: "/images/potrait.webp",
         width: 800,
         height: 600,
-        alt: "Hasmunandar Portrait",
+        alt: "Hasmunandar",
       },
     ],
     locale: "id_ID",
@@ -58,100 +66,76 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Portofolio Hasmunandar | Calon Guru Profesional & Pendidik Sekolah Dasar",
+    title: "Hasmunandar | Portofolio",
     description:
-      "Portofolio digital dan perjalanan belajar Hasmunandar, mahasiswa PPG Prajabatan & PGSD, berfokus pada inovasi pembelajaran dan teknologi pendidikan.",
+      "Portofolio Hasmunandar, mahasiswa PPG Prajabatan & PGSD.",
     images: ["/images/potrait.webp"],
   },
   icons: {
     icon: "/logo.svg",
     apple: "/logo.svg",
   },
-  other: {
-    "fb:app_id": process.env.NEXT_PUBLIC_FB_APP_ID || "",
-  },
 };
 
-function MaintenanceScreen() {
-  return (
-    <main className="min-h-dvh flex flex-col items-center justify-center px-6">
-      <div className="relative size-[250px] sm:size-[300px] lg:size-[350px]">
-        <Image
-          src="/images/mainten.gif"
-          alt="Under maintenance"
-          fill
-          className="object-contain"
-          priority
-        />
-      </div>
-      <p className="mt-8 text-lg sm:text-xl lg:text-[24px] text-text-primary/70 font-body text-center">
-        Halaman ini sedang dalam perbaikan
-      </p>
-    </main>
-  );
-}
+export const viewport: Viewport = {
+  themeColor: "#FAF7F0",
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
-
   return (
     <html
       lang="id"
-      className={`${spaceGrotesk.variable} ${inter.variable}`}
+      data-scroll-behavior="smooth"
+      className={`${spaceGrotesk.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="opacity-100">
+      <body className="antialiased">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Person",
-              "name": "Hasmunandar",
-              "url": "https://hsmnandar.vercel.app",
-              "image": "https://hsmnandar.vercel.app/images/potrait.webp",
-              "description": "Mahasiswa PPG Prajabatan dan calon pendidik Sekolah Dasar (PGSD) yang berfokus pada pengembangan media pembelajaran interaktif dan inovasi teknologi pendidikan.",
-              "jobTitle": "Calon Guru Profesional / Pendidik",
-              "alumniOf": [
-                {
-                  "@type": "EducationalOrganization",
-                  "name": "Universitas Negeri Makassar"
-                },
-                {
-                  "@type": "EducationalOrganization",
-                  "name": "Universitas Muhammadiyah Indonesia"
-                }
+              name: "Hasmunandar",
+              url: "https://hsmnandar.vercel.app",
+              image: "https://hsmnandar.vercel.app/images/potrait.webp",
+              description:
+                "Mahasiswa PPG Prajabatan dan calon pendidik Sekolah Dasar (PGSD) yang berfokus pada pengembangan media pembelajaran interaktif.",
+              jobTitle: "Calon Guru Profesional",
+              alumniOf: [
+                { "@type": "EducationalOrganization", name: "Universitas Negeri Makassar" },
+                { "@type": "EducationalOrganization", name: "Universitas Muhammadiyah Indonesia" },
               ],
-              "knowsAbout": [
+              knowsAbout: [
                 "Pendidikan Sekolah Dasar",
                 "Kurikulum Merdeka",
                 "Teknologi Pendidikan",
                 "Media Pembelajaran Interaktif",
-                "Penelitian Tindakan Kelas"
               ],
-              "sameAs": [
+              sameAs: [
                 "https://facebook.com/Hasmunandar",
                 "https://instagram.com/hsmnandar",
                 "https://linkedin.com/in/Hasmunandar",
-                "https://github.com/nandarjr660"
-              ]
-            })
+                "https://github.com/nandarjr660",
+              ],
+            }),
           }}
         />
-        {isMaintenance ? (
-          <MaintenanceScreen />
-        ) : (
-          <>
-            <DisableContextMenu />
-            <Preloader />
-            <ScrollProgress />
-            <Navbar />
+        <SmoothScroll>
+          <Preloader />
+          <ScrollProgress />
+          <a href="#main-content" className="skip-link">
+            Langkah ke konten utama
+          </a>
+          <Navbar />
+          <main id="main-content">
             {children}
-          </>
-        )}
+          </main>
+          <Footer />
+        </SmoothScroll>
       </body>
     </html>
   );

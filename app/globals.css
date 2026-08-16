@@ -1,31 +1,204 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-accent: #FE979C;
-  --color-interaction: #FEAE96;
-  --color-background: #F6E8DF;
-  --color-text-primary: #013237;
+  --color-paper: #FAF7F0;
+  --color-ink: #1A1A1A;
+  --color-accent: #D4522A;
+  --color-interaction: #D4522A;
+  --color-muted: #6B6560;
+  --color-border: #1A1A1A;
+  --color-surface: #F0EDE6;
+  --color-focus: #D4522A;
+  --color-accent-strong: #BC4523;
+  --color-playful-coral: #FF6B6B;
+  --color-playful-teal: #20B2AA;
+  --color-playful-purple: #9B59B6;
+  --color-playful-amber: #F4A261;
 
+  --font-display: "Space Grotesk", sans-serif;
   --font-heading: "Space Grotesk", sans-serif;
-  --font-body: "Inter", sans-serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
 }
 
 html {
   scrollbar-width: none;
-  -ms-overflow-style: none;
+  overflow-x: clip;
+  scroll-behavior: smooth;
 }
 
 html::-webkit-scrollbar {
   display: none;
 }
 
-body {
-  background-color: var(--color-background);
-  color: var(--color-text-primary);
-  font-family: var(--font-body);
-  overscroll-behavior: none;
-  position: relative;
+html.lenis, html.lenis body {
+  height: auto;
 }
 
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
 
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
 
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+html::-webkit-scrollbar {
+  width: 8px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 0;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+*:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 9999;
+  padding: 8px 16px;
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 16px;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-paper);
+}
+
+/* Brutalist utility classes */
+.brutalist-border {
+  border: 3px solid var(--color-border);
+}
+
+.brutalist-border-thin {
+  border: 1.5px solid var(--color-border);
+}
+
+.brutalist-shadow {
+  box-shadow: 4px 4px 0 var(--color-border);
+}
+
+.brutalist-shadow-lg {
+  box-shadow: 6px 6px 0 var(--color-border);
+}
+
+.brutalist-shadow-sm {
+  box-shadow: 3px 3px 0 var(--color-border);
+}
+
+.brutalist-shadow-playful {
+  box-shadow: 4px 4px 0 var(--color-playful-coral);
+}
+
+.brutalist-shadow-teal {
+  box-shadow: 4px 4px 0 var(--color-playful-teal);
+}
+
+.brutalist-shadow-amber {
+  box-shadow: 4px 4px 0 var(--color-playful-amber);
+}
+
+/* Noise texture overlay */
+.noise-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/images/noise.webp");
+  background-repeat: repeat;
+  background-size: 100px 100px;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Z-index scale */
+:root {
+  --z-base: 0;
+  --z-above: 10;
+  --z-nav: 50;
+  --z-overlay: 100;
+  --z-modal: 500;
+  --z-toast: 1000;
+  --z-skip: 9999;
+}
+
+/* Marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+/* Loading bar */
+@keyframes loadingBar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+
+/* View transitions */
+:root {
+  --duration-exit: 320ms;
+  --duration-enter: 520ms;
+  --ease-transition: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes page-out {
+  from { opacity: 1; transform: translateY(0); filter: blur(0); }
+  to { opacity: 0; transform: translateY(-8px); filter: blur(3px); }
+}
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(10px); filter: blur(3px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+::view-transition-old(.fade-out) {
+  animation: page-out var(--duration-exit) var(--ease-transition) both;
+}
+::view-transition-new(.fade-in) {
+  animation: page-in var(--duration-enter) var(--ease-transition)
+    calc(var(--duration-exit) * -0.4) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
