@@ -42,6 +42,14 @@ function MagneticButton({
 
 const nameChars = "Hasmunandar".split("");
 
+const marqueeWords = [
+  "PPG Prajabatan",
+  "PGSD",
+  "Kurikulum Merdeka",
+  "Media Pembelajaran",
+  "Teknologi Pendidikan",
+];
+
 const charVariants = {
   hidden: { opacity: 0, y: 40 },
   visible: (i: number) => ({
@@ -97,7 +105,7 @@ const Home = () => {
 
   return (
     <ViewTransition enter="fade-in" exit="fade-out" default="none">
-    <section className="min-h-dvh relative overflow-hidden">
+    <section className="min-h-dvh flex flex-col overflow-hidden">
       <div className="h-[3px] bg-accent w-full" />
 
       <motion.div style={{ opacity: heroOpacity }} className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-10 pt-[88px] sm:pt-[100px] lg:pt-[110px] pb-12 sm:pb-16 lg:pb-20">
@@ -189,7 +197,76 @@ const Home = () => {
         </div>
       </motion.div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-border" />
+      <div className="mt-auto border-t-[3px] border-border bg-surface overflow-hidden">
+        <div className="flex whitespace-nowrap animate-marquee">
+          {[0, 1].map((dup) => (
+            <div key={dup} className="flex shrink-0 items-center">
+              {marqueeWords.map((w) => (
+                <span key={w} className="mx-6 font-display text-[14px] font-bold uppercase tracking-widest text-ink flex items-center gap-6">
+                  {w}
+                  <span className="text-accent">✦</span>
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section className="border-t-[3px] border-border bg-paper">
+      <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-10 py-16 sm:py-20 lg:py-24">
+        <motion.div custom={0.1} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p className="font-mono text-[11px] text-muted uppercase tracking-widest">Projek Unggulan / 01</p>
+            <h2 className="mt-3 font-display font-bold text-[28px] sm:text-[36px] lg:text-[44px] leading-[0.95] tracking-tight text-ink">Karya yang sedang dikerjakan</h2>
+          </div>
+          <a href="/projects" className="group inline-flex items-center gap-2 font-display font-semibold text-[14px] tracking-tight text-ink border-[2.5px] border-border px-5 py-2.5 hover:bg-ink hover:text-paper transition-colors duration-150">
+            Lihat Semua Projek
+            <span className="group-hover:translate-x-1 transition-transform duration-150">→</span>
+          </a>
+        </motion.div>
+
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+          <motion.a href="/projects" custom={0.2} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} className="group block border-[3px] border-border bg-paper brutalist-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150">
+            <div className="h-2 bg-playful-teal" />
+            <div className="p-6 sm:p-8 flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-muted">PPL / 2026</span>
+                <span className="text-[20px] text-ink group-hover:translate-x-1 transition-transform duration-150">→</span>
+              </div>
+              <h3 className="font-display font-bold text-[22px] sm:text-[26px] tracking-tight text-ink">Portofolio PPL Digital</h3>
+              <p className="font-body text-[15px] text-muted leading-relaxed">E-portofolio pengalaman Praktik Pengalaman Lapangan di SDN Pengasinan IX — dokumentasi dan refleksi pembelajaran.</p>
+            </div>
+          </motion.a>
+
+          <motion.a href="/projects" custom={0.3} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} className="group block border-[3px] border-border bg-paper brutalist-shadow-sm hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all duration-150">
+            <div className="h-2 bg-playful-coral" />
+            <div className="p-6 sm:p-8 flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-[11px] font-bold uppercase tracking-widest text-muted">MEDIA / 2026</span>
+                <span className="text-[20px] text-ink group-hover:translate-x-1 transition-transform duration-150">→</span>
+              </div>
+              <h3 className="font-display font-bold text-[22px] sm:text-[26px] tracking-tight text-ink">Media Pembelajaran Interaktif</h3>
+              <p className="font-body text-[15px] text-muted leading-relaxed">Media belajar interaktif untuk siswa Sekolah Dasar berbasis teknologi pendidikan.</p>
+            </div>
+          </motion.a>
+        </div>
+
+        <motion.div custom={0.4} initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp} className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-8 border-t-[3px] border-border pt-8">
+          <div>
+            <p className="font-mono text-[11px] text-muted uppercase tracking-widest">Kampus</p>
+            <p className="mt-2 font-display font-bold text-[24px] sm:text-[28px] tracking-tight text-ink">UNM & UMI</p>
+          </div>
+          <div>
+            <p className="font-mono text-[11px] text-muted uppercase tracking-widest">Projek</p>
+            <p className="mt-2 font-display font-bold text-[24px] sm:text-[28px] tracking-tight text-ink">4+ Digital</p>
+          </div>
+          <div>
+            <p className="font-mono text-[11px] text-muted uppercase tracking-widest">Fokus</p>
+            <p className="mt-2 font-display font-bold text-[24px] sm:text-[28px] tracking-tight text-ink">Media & Inovasi</p>
+          </div>
+        </motion.div>
+      </div>
     </section>
     </ViewTransition>
   );
