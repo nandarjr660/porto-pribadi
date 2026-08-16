@@ -31,10 +31,10 @@ function MagneticButton({
 
   const handleLeave = useCallback(() => { x.set(0); y.set(0); }, [x, y]);
 
-  const Comp = href ? motion.a : motion.button;
+  const Comp: React.ElementType = href ? motion.a : motion.button;
   const compProps = href ? { href } : { onClick };
   return (
-    <Comp ref={ref as React.RefObject<HTMLAnchorElement | HTMLButtonElement>} className={className} style={{ x: springX, y: springY }} onMouseMove={handleMouse} onMouseLeave={handleLeave} whileTap={{ scale: 0.95 }} {...compProps} {...props}>
+    <Comp ref={ref as never} className={className} style={{ x: springX, y: springY }} onMouseMove={handleMouse} onMouseLeave={handleLeave} whileTap={{ scale: 0.95 }} {...compProps} {...props}>
       {children}
     </Comp>
   );
