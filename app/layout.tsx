@@ -43,6 +43,9 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Hasmunandar", url: "https://hsmnandar.vercel.app" }],
   creator: "Hasmunandar",
+  verification: {
+    google: "4bxJJVPgCCP6EWmk2KaReb8YqjvhWA2H79ZSO7gIpZk",
+  },
   metadataBase: new URL("https://hsmnandar.vercel.app"),
   alternates: {
     canonical: "/",
