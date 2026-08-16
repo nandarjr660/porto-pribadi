@@ -69,10 +69,18 @@ const Navbar = () => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+      window.__lenis?.stop();
     } else {
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      window.__lenis?.start();
     }
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+      window.__lenis?.start();
+    };
   }, [isOpen]);
 
   const handleNavClick = (href: string) => {
@@ -184,6 +192,7 @@ const Navbar = () => {
             animate="visible"
             exit="exit"
             className="fixed inset-0 z-[var(--z-overlay)] bg-paper flex flex-col md:hidden overflow-y-auto overscroll-behavior:contain"
+            data-lenis-prevent
             style={{ top: "64px" }}
             role="dialog"
             aria-modal="true"
